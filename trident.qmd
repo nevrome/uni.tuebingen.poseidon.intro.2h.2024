@@ -53,3 +53,29 @@ trident forge \
 ```{bash}
 trident summarise -d myPac
 ```
+
+```{bash}
+trident survey -d myPac
+```
+
+```{bash}
+trident genoconvert -d myPac --outFormat EIGENSTRAT
+```
+
+```{r}
+ind <- readr::read_tsv(
+  "scratch/myPac/myPac.ind",
+  col_names = c("id", "sex", "pop")
+)
+
+pca_out <- smartsnp::smart_pca(
+  "scratch/myPac/myPac.geno",
+  sample_group = seq_len(nrow(ind)),
+  missing_impute = "mean",
+  sample_project = which(ind$id == "Iceman.SG"),
+  pc_axes = 2
+)
+
+save(pca_out, file = "data/pca_out.RData")
+```
+
