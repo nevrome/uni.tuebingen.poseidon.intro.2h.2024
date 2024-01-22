@@ -1,5 +1,55 @@
 ---
 title: "About"
+editor_options: 
+  chunk_output_type: inline
+execute: 
+  eval: false
+engine: knitr
 ---
 
-About this site
+```{bash}
+mkdir scratch
+<!-- cd scratch -->
+```
+
+```{bash}
+wget https://github.com/poseidon-framework/poseidon-hs/releases/latest/download/trident-Linux
+mv trident-Linux trident
+chmod +x trident
+./trident -h
+```
+
+```{bash}
+trident list --remote --packages
+```
+
+```{bash}
+wget https://raw.githubusercontent.com/nevrome/mobest.analysis.2022/master/code/01_data_preparation/modern_western_eurasian_populations.txt
+mkdir data
+trident fetch -d data --fetchFile modern_western_eurasian_populations.txt
+```
+
+
+```{bash}
+trident fetch -d data -f "*2012_KellerNatureCommunications*"
+```
+
+```{bash}
+trident list -d data/2012_KellerNatureCommunications-2.1.1 --individuals
+cd data/2012_KellerNatureCommunications-2.1.1
+rm *.yml *.md *.bib *.janno
+```
+
+```{bash}
+trident forge \
+  -d data \
+  --forgeFile modern_western_eurasian_populations.txt \
+  -p data/2012_KellerNatureCommunications-2.1.1/2012_KellerNatureCommunications.bed \
+  -f "<Iceman.SG>" \
+  --intersect \
+  -o myPac
+```
+
+```{bash}
+trident summarise -d myPac
+```

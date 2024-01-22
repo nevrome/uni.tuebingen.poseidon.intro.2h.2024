@@ -1,6 +1,10 @@
 # rendered page (for now)
 _site
 
+# scratch space for experimental data analysis
+scratch/
+
+
 # History files
 .Rhistory
 .Rapp.history
