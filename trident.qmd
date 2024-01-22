@@ -72,10 +72,20 @@ pca_out <- smartsnp::smart_pca(
   "scratch/myPac/myPac.geno",
   sample_group = seq_len(nrow(ind)),
   missing_impute = "mean",
-  sample_project = which(ind$id == "Iceman.SG"),
+  sample_project = 1250:1251,#which(ind$id == "Iceman.SG"),
   pc_axes = 2
 )
 
-save(pca_out, file = "data/pca_out.RData")
+saveRDS(pca_out, file = "scratch/pca_out.rds")
 ```
 
+```{r}
+pca_out <- readRDS("scratch/pca_out.rds")
+
+library(magrittr)
+library(ggplot2)
+
+pca_out$pca.sample_coordinates %>%
+  ggplot() +
+  geom_point(aes(x = PC1, y = PC2, color = Class))
+```
