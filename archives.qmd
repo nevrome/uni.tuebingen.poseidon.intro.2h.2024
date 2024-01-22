@@ -1,0 +1,7 @@
+```{bash}
+trident validate -d myPac
+```
+
+```{bash}
+trident rectify -d myPac
+```
