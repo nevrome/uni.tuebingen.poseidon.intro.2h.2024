@@ -1,0 +1,24 @@
+project:
+  type: website
+
+website:
+  title: "Poseidon instroduction for Tübingen University, February 2024"
+  sidebar:
+    style: "floating"
+    search: true
+    contents:
+      - href: index.qmd
+        text: Home
+      - about.qmd
+      - href: https://github.com/nevrome/uni.tuebingen.poseidon.intro.2h.2024
+        text: This page on GitHub
+        icon: github
+
+format:
+  html:
+    theme: cosmo
+    css: styles.css
+    toc: true
+
+
+
