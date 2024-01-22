@@ -6,17 +6,23 @@ website:
   sidebar:
     style: "floating"
     search: true
+    border: true
     contents:
       - href: index.qmd
-        text: Home
-      - about.qmd
+        text: Overview
+      - href: trident.qmd
+        text: Data management with trident
+      - href: analysis.R
+        text: Interfaces for queries and data analysis
+      - href: archives.qmd
+        text: Interacting with the public data archives
       - href: https://github.com/nevrome/uni.tuebingen.poseidon.intro.2h.2024
         text: This page on GitHub
         icon: github
 
 format:
   html:
-    theme: cosmo
+    theme: litera
     css: styles.css
     toc: true
 
