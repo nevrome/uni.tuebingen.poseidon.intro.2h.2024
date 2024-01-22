@@ -12,7 +12,7 @@ website:
         text: Overview
       - href: trident.qmd
         text: Data management with trident
-      - href: analysis.R
+      - href: analysis.qmd
         text: Interfaces for queries and data analysis
       - href: archives.qmd
         text: Interacting with the public data archives

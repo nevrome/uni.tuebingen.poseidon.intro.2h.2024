@@ -1,3 +1,12 @@
+---
+title: "About"
+editor_options: 
+  chunk_output_type: inline
+execute: 
+  eval: false
+engine: knitr
+---
+
 ```{bash}
 trident validate -d myPac
 ```
