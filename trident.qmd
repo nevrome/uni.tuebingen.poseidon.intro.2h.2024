@@ -94,7 +94,7 @@ pca_out <- smartsnp::smart_pca(
   "scratch/myDataWithRef/myDataWithRef.geno",
   sample_group = seq_len(nrow(ind)),
   missing_impute = "mean",
-  sample_project = which(ind$id %in% c("Iceman.SG", "RISE434.SG")),
+  sample_project = which(ind$id == "Iceman.SG"),
   pc_axes = 2
 )
 
