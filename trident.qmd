@@ -71,6 +71,22 @@ trident forge \
 ```
 
 ```{bash}
+qjanno "SELECT * FROM d(myDataWithRef)" -c
+
+qjanno "
+SELECT Poseidon_ID, Group_Name, row_number() OVER (PARTITION BY Group_Name ORDER BY random()) rn
+FROM d(myDataWithRef)
+" --raw > huhu.txt
+
+qjanno "
+SELECT '<'||Poseidon_ID||'>'
+FROM huhu.txt
+WHERE rn <= 2
+ORDER BY Group_Name DESC;
+" --raw --noOutHeader | wc -l
+```
+
+```{bash}
 trident summarise -d myPac
 ```
 
