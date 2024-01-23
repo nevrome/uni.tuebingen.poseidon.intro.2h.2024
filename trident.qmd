@@ -47,7 +47,7 @@ trident fetch -d data -f "<RISE434.SG>"
 
 ```{bash}
 cd data/2015_AllentoftNature-2.1.1
-rm *.yml *.md *.bib *.janno
+rm *.yml *.md *.bib
 ```
 
 ```{bash}
@@ -81,6 +81,8 @@ trident survey -d myPac
 ```{bash}
 #trident genoconvert -d myPac --outFormat EIGENSTRAT
 ```
+
+.bib file
 
 ```{r}
 ind <- readr::read_tsv(

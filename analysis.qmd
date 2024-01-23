@@ -1,10 +1,52 @@
 ---
 title: "About"
 editor_options: 
-  chunk_output_type: inline
+  chunk_output_type: console
 execute: 
   eval: false
 engine: knitr
 ---
 
-...
+## janno
+
+```{r}
+library(magrittr)
+library(ggplot2)
+
+my_janno <- janno::read_janno("scratch/data/2015_AllentoftNature-2.1.1/2015_AllentoftNature.janno")
+
+my_janno_age <- my_janno %>% janno::process_age()
+
+my_janno_age %>%
+  dplyr::select(Poseidon_ID, Date_BC_AD_Median, Date_BC_AD_Sample) %>%
+  dplyr::arrange(Date_BC_AD_Median) %>%
+  dplyr::mutate(Poseidon_ID = factor(Poseidon_ID, levels = Poseidon_ID)) %>%
+  tidyr::unnest(cols = Date_BC_AD_Sample) %>%
+  ggplot() +
+  geom_violin(aes(x = Poseidon_ID, y = Date_BC_AD_Sample))
+```
+
+## qjanno
+
+```{bash}
+```
+
+https://www.poseidon-adna.org/#/qjanno
+
+## xerxes
+
+```{bash}
+xerxes fstats -d data \
+    --stat "F3(Nganasan,French,Finnish)" \
+    --stat "F3(Nganasan, Icelandic, Finnish)" \
+    --stat "F3(Nganasan, Lithuanian, Finnish)" \
+    --stat "F3(Nganasan, Norwegian, Finnish)" \
+    --stat "F3(Russia_Bolshoy, French, Finnish)" \
+    --stat "F3(Russia_Bolshoy, Icelandic, Finnish)" \
+    --stat "F3(Russia_Bolshoy, Lithuanian, Finnish)" \
+    --stat "F3(Russia_Bolshoy, Norwegian, Finnish)"
+```
+
+https://mpi-eva-archaeogenetics.github.io/comp_human_adna_book/fstats.html
+
+
