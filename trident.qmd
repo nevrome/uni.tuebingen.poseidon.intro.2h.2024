@@ -9,7 +9,7 @@ engine: knitr
 
 ```{bash}
 mkdir scratch
-<!-- cd scratch -->
+cd scratch
 ```
 
 ```{bash}
@@ -41,13 +41,33 @@ rm *.yml *.md *.bib *.janno
 ```
 
 ```{bash}
+trident list --remote --individuals | grep "RISE434"
+trident fetch -d data -f "<RISE434.SG>"
+```
+
+```{bash}
+cd data/2015_AllentoftNature-2.1.1
+rm *.yml *.md *.bib *.janno
+```
+
+```{bash}
+trident forge \
+  -p data/2012_KellerNatureCommunications-2.1.1/2012_KellerNatureCommunications.bed \
+  -p data/2015_AllentoftNature-2.1.1/2015_AllentoftNature.bed \
+  -f "<Iceman.SG>,<RISE434.SG>" \
+  --onlyGeno \
+  -o myOwnData
+```
+
+```{bash}
 trident forge \
   -d data \
   --forgeFile modern_western_eurasian_populations.txt \
-  -p data/2012_KellerNatureCommunications-2.1.1/2012_KellerNatureCommunications.bed \
-  -f "<Iceman.SG>" \
+  -p myOwnData/myOwnData.bed \
+  -f "<Iceman.SG>,<RISE434.SG>" \
   --intersect \
-  -o myPac
+  --outFormat EIGENSTRAT \
+  -o myDataWithRef
 ```
 
 ```{bash}
@@ -59,20 +79,20 @@ trident survey -d myPac
 ```
 
 ```{bash}
-trident genoconvert -d myPac --outFormat EIGENSTRAT
+#trident genoconvert -d myPac --outFormat EIGENSTRAT
 ```
 
 ```{r}
 ind <- readr::read_tsv(
-  "scratch/myPac/myPac.ind",
+  "scratch/myDataWithRef/myDataWithRef.ind",
   col_names = c("id", "sex", "pop")
 )
 
 pca_out <- smartsnp::smart_pca(
-  "scratch/myPac/myPac.geno",
+  "scratch/myDataWithRef/myDataWithRef.geno",
   sample_group = seq_len(nrow(ind)),
   missing_impute = "mean",
-  sample_project = 1250:1251,#which(ind$id == "Iceman.SG"),
+  sample_project = which(ind$id %in% c("Iceman.SG", "RISE434.SG")),
   pc_axes = 2
 )
 
