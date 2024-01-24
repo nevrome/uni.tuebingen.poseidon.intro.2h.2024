@@ -158,35 +158,78 @@ trident summarize -d iceWithRef
 
 ## Reducing the data size
 
+Our `iceWithRef` package is ready for downstream analysis, but it is also a bit bulky with, for example, 314 Russian samples alone. We could probably reduce its size without loosing much statistical power for the PCA we want to run.
+
+One way of doing so would be, to limit the maximum number of samples per population. We can easily subset the package with `trident forge`, if we can obtain a list of samples we want to keep. But how do we get this list?
+
+The Poseidon framework includes the [`qjanno` software tool](https://www.poseidon-adna.org/#/qjanno) that allows to query arbitrary .janno and .txt files as SQLite database tables and thus enable advanced selection operations.
+
+We can install it just as `trident`:
+
 ```{bash}
-qjanno "SELECT * FROM d(myDataWithRef)" -c
+# download the current stable release binary
+wget https://github.com/poseidon-framework/qjanno/releases/latest/download/qjanno-Linux
+# rename it to simply qjanno
+mv qjanno-Linux qjanno
+# make it executable
+chmod +x qjanno
+# run it to test if it is working
+./qjanno -h
+```
 
-qjanno "
-SELECT Poseidon_ID, Group_Name, row_number() OVER (PARTITION BY Group_Name ORDER BY random()) rn
-FROM d(myDataWithRef)
-" --raw > huhu.txt
+With qjanno ready we can query the .janno file for arbitrary information, e.g. the number of samples from each country.
 
+```{bash}
+./qjanno "
+SELECT   Country,
+         count(*) as n
+FROM     d(iceWithRef)
+GROUP BY Country
+ORDER BY n
+"
+```
+
+If we forget the available columns in .janno files the `-c` option returns a list.
+
+```{bash}
+qjanno "SELECT * FROM d(iceWithRef)" -c
+```
+
+With this power we can construct a two-step query for random samples for each group. 
+
+```{bash}
+# construct a randomly ordered list of groups and their samples
 qjanno "
-SELECT '<'||Poseidon_ID||'>'
-FROM huhu.txt
-WHERE rn <= 2
+SELECT Poseidon_ID,
+       Group_Name,
+       row_number() OVER (PARTITION BY Group_Name ORDER BY random()) rn
+FROM   d(iceWithRef)
+" --raw > id_per_sample.txt
+cat id_per_sample.txt
+# subset samples from that list
+qjanno "
+SELECT   '<'||Poseidon_ID||'>'
+FROM     id_per_sample.txt
+WHERE    rn <= 10
 ORDER BY Group_Name DESC;
-" --raw --noOutHeader | wc -l
+" --raw --noOutHeader > ten_samples_max.txt
+```
+
+`ten_samples_max.txt` has the structure of the selection language for `forge` and we can run it with it to derive a smaller analysis dataset.
+
+```{bash}
+trident forge \
+  -d iceWithRef \
+  --forgeFile ten_samples_max.txt \
+  --outFormat EIGENSTRAT \
+  -o iceWithRefSmall
 ```
 
 ```{bash}
-trident summarise -d myPac
+trident summarize -d iceWithRefSmall
 ```
 
-```{bash}
-trident survey -d myPac
-```
-
-```{bash}
-#trident genoconvert -d myPac --outFormat EIGENSTRAT
-```
-
-.bib file
+## Perform a PCA analysis
 
 ```{r}
 ind <- readr::read_tsv(

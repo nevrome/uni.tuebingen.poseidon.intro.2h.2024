@@ -2,7 +2,7 @@ project:
   type: website
 
 website:
-  title: "Poseidon instroduction for Tübingen University, February 2024"
+  title: "Poseidon introduction for Tübingen University, February 2024"
   sidebar:
     style: "floating"
     search: true
