@@ -1,63 +1,124 @@
 ---
-title: "About"
 editor_options: 
   chunk_output_type: inline
 execute: 
   eval: false
 engine: knitr
+shift-heading-level-by: 1
 ---
 
-```{bash}
-mkdir scratch
-cd scratch
-```
+# Analyzing our data with reference data
+
+With our data neatly packaged we can approach the actual challenge of reconstructing its genetic affiliation and origin story. To do so we require reference data to compare it to, e.g. with a principal component analysis.
+
+## Acquiring modern reference data
+
+In its public [community-archive](https://www.poseidon-adna.org/#/archive_overview) the Poseidon ecosystem features a curated source of genotype data.
+
+We can get an overview over all publication-wise packages available there with `trident`:
 
 ```{bash}
-wget https://github.com/poseidon-framework/poseidon-hs/releases/latest/download/trident-Linux
-mv trident-Linux trident
-chmod +x trident
-./trident -h
+./trident list --remote --packages
 ```
+
+Or in a more interactive way with the [archive explorer](https://www.poseidon-adna.org/#/archive_explorer) on the poseidon website.
+
+As our sample of interest was found in Western Eurasia a first valuable point of reference is genotype data from various modern populations from there.
+
+:::{.scrolling}
+
+```{filename="modern_western_eurasian_populations.txt"}
+Abazin
+Abkhasian
+Adygei
+Albanian
+Armenian
+Armenian_Hemsheni
+Assyrian
+Avar
+Azeri
+Balkar
+Basque
+BedouinA
+BedouinB
+Belarusian
+Bulgarian
+Chechen
+Circassian
+Croatian
+Cypriot
+Czech
+Darginian
+Druze
+English
+Estonian
+Ezid
+Finnish
+French
+Georgian
+Greek
+Hungarian
+Icelandic
+Ingushian
+Iranian
+Italian_North
+Italian_South
+Jew_Ashkenazi
+Jew_Georgian
+Jew_Iranian
+Jew_Iraqi
+Jew_Libyan
+Jew_Moroccan
+Jew_Tunisian
+Jew_Turkish
+Jew_Yemenite
+Jordanian
+Kabardinian
+Kaitag
+Karachai
+Kubachinian
+Kumyk
+Kurd
+Lak
+Lebanese
+Lebanese_Christian
+Lebanese_Muslim
+Lezgin
+Lithuanian
+Maltese
+Moldavian
+Mordovian
+Norwegian
+Orcadian
+Ossetian
+Palestinian
+Romanian
+Russian
+Sardinian
+Saudi
+Scottish
+Sicilian
+Spanish
+Spanish_North
+Syrian
+Tabasaran
+Turkish
+Ukrainian
+```
+
+The list can be downloaded [here](https://raw.githubusercontent.com/nevrome/mobest.analysis.2022/master/code/01_data_preparation/modern_western_eurasian_populations.txt).
+
+:::
+
+`trident` allows to download packages that contain samples with this group attribution from the community archive.
 
 ```{bash}
-trident list --remote --packages
+trident fetch -d refData --fetchFile modern_western_eurasian_populations.txt
 ```
 
-```{bash}
-wget https://raw.githubusercontent.com/nevrome/mobest.analysis.2022/master/code/01_data_preparation/modern_western_eurasian_populations.txt
-mkdir data
-trident fetch -d data --fetchFile modern_western_eurasian_populations.txt
-```
+This works, because the population list above already has the same structure as the selection language trident uses for `fetch` and `forge` (more about that below).
 
-
-```{bash}
-trident fetch -d data -f "*2012_KellerNatureCommunications*"
-```
-
-```{bash}
-trident list -d data/2012_KellerNatureCommunications-2.1.1 --individuals
-cd data/2012_KellerNatureCommunications-2.1.1
-rm *.yml *.md *.bib *.janno
-```
-
-```{bash}
-trident list --remote --individuals | grep "RISE434"
-trident fetch -d data -f "<RISE434.SG>"
-```
-
-```{bash}
-cd data/2015_AllentoftNature-2.1.1
-rm *.yml *.md *.bib
-```
-
-```{bash}
-trident forge \
-  -p data/2012_KellerNatureCommunications-2.1.1/2012_KellerNatureCommunications.bed \
-  -p data/2015_AllentoftNature-2.1.1/2015_AllentoftNature.bed \
-  -f "<Iceman.SG>,<RISE434.SG>" \
-  --onlyGeno \
-  -o myOwnData
-```
+## Merging the reference data with our data
 
 ```{bash}
 trident forge \

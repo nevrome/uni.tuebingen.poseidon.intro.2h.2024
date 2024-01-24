@@ -17,7 +17,7 @@ website:
           - href: data_prep.qmd
             text: Data preparation
           - href: ref_pca.qmd
-            text: Reference data and a first PCA
+            text: Reference data and PCA
           - href: spacetime.qmd
             text: Spatiotemporal context data
           - href: fstats.qmd

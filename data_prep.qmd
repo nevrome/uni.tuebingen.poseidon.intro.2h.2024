@@ -9,6 +9,8 @@ shift-heading-level-by: 1
 
 # Preparing a Poseidon package
 
+As a first step of our analysis we should lay some groundwork and transform our research data into a tidy and interoperable data structure.
+
 ## Creating a working space
 
 We're going to need some scratch space for this analysis, so we create a new directory `scratch`.

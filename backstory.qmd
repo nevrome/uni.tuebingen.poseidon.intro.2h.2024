@@ -1,11 +1,12 @@
 ---
-title: "Hunt for the Ice mummy"
 editor_options: 
   chunk_output_type: inline
 execute: 
   eval: false
 engine: knitr
 ---
+
+# Hunt for the Ice mummy
 
 It is the year 2024 in an alternative universe. You are a student of archaeogenetics at Tübingen university. One cold February afternoon you receive a cryptic email from your professor. You have not seen him for months, when he had left for an expedition in the Tyrolean Alps.
 
