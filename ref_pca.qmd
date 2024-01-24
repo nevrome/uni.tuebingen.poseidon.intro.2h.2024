@@ -116,20 +116,47 @@ The list can be downloaded [here](https://raw.githubusercontent.com/nevrome/mobe
 trident fetch -d refData --fetchFile modern_western_eurasian_populations.txt
 ```
 
+```
+refData
+├── 2012_PattersonGenetics-2.1.3
+├── 2014_LazaridisNature-4.0.2
+├── 2016_LazaridisNature-2.1.3
+├── 2019_Biagini_Spain-2.2.1
+└── 2019_Jeong_InnerEurasia-3.0.1
+```
+
 This works, because the population list above already has the same structure as the selection language trident uses for `fetch` and `forge` (more about that below).
 
 ## Merging the reference data with our data
 
+We now have our own Poseidon package for the ice mummy in a directory `ice` and various packages with modern reference data in `refData`. Our package features genotype data in EIGENSTRAT format, the reference data packages include data in PLINKs binary format.
+
+`trident`s most notable feature is the ability to merge the exact samples we require from both data sources at once with the [`forge` subcommand](https://www.poseidon-adna.org/#/trident?id=forge-command).
+
 ```{bash}
 trident forge \
-  -d data \
+  -d refData \
+  -d ice \
   --forgeFile modern_western_eurasian_populations.txt \
-  -p myOwnData/myOwnData.bed \
-  -f "<Iceman.SG>,<RISE434.SG>" \
-  --intersect \
+  -f "<ice>" \
   --outFormat EIGENSTRAT \
-  -o myDataWithRef
+  --intersect \
+  -o iceWithRef
 ```
+
+Note how we list two directories as data sources with `-d`/`--baseDir`. `forge` discovers and reads all Poseidon packages both in `refData` and `ice`.
+
+It then constructs a subset- and merge operation, by parsing the selection language from both the `--forgeFile` `modern_western_eurasian_populations.txt` and the individual forge string `-f` `"<ice>"`. The forge language is a powerful DSL (domain specific language) that allows positive and negative selection of individuals (in `<...>`), populations and Poseidon packages (in `*...*`).
+
+`forge` reads both data in EIGENSTRAT and in PLINK's binary format in constant memory via stream-processing. It can also produce both formats for the output package, though the default is the more space efficient PLINK format, so we have to set `--outFormat EIGENSTRAT` here for our downstream applications.
+
+The `--intersect` flag is a reaction to the fact that our input packages feature different SNP sets: Some include only the ~600.000k HumanOrigins SNPs, others the ~1.240.000k 1240K SNPs. As a default `forge` returns the union of all SNP sets it encounters, which would here yield many missing entries for the modern reference data.
+
+```{bash}
+trident summarize -d iceWithRef
+```
+
+## Reducing the data size
 
 ```{bash}
 qjanno "SELECT * FROM d(myDataWithRef)" -c
