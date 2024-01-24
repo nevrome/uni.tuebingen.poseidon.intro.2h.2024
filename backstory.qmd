@@ -22,14 +22,37 @@ Attached you find multiple files. First this incredible photograph:
 
 But then also genotype data files in EIGENSTRAT format:
 
+```{filename="ice.ind"}
+ice	M	iceG
+```
 
-They seem to feature the SNPs for a single individual. With a lot of missing values, but enough to work with. You are justifiably concerned about the ethical implications of working with a sample you know so little about, but you put these concerns aside for the moment. It is data analysis time!
+```{filename="ice.snp"}
+rs3094315	1	2.013e-2	752566	G	A
+rs12124819	1	2.0242e-2	776546	G	A
+rs28765502	1	2.2137e-2	832918	C	T
+rs7419119	1	2.2518e-2	842013	G	T
+rs950122	1	2.272e-2	846864	C	G
+...
+```
 
+```{filename="ice.geno"}
+0
+0
+2
+2
+0
+...
+```
+
+They seem to feature the SNPs for a single individual. Few missing values, certainly enough to work with.
+
+You are justifiably concerned about the ethical implications of working with a sample you know so little about, but you put these concerns aside for the moment. You want to get to the bottom of this mystery first.
 
 ***
 
 ::: {style="font-size: 60%;"}
 
-The "photograph" is AI-generated with the following prompt: "A film still of a famous German mountain climber and the Yeti discovering an Ice mummy in the Tyrolean Alps". Made with Microsoft Bing Image Creator.
+- The "photograph" is AI-generated with the following prompt: "A film still of a famous German mountain climber and the Yeti discovering an Ice mummy in the Tyrolean Alps". Made with Microsoft Bing Image Creator.
+- The genotype data was taken from Keller, A., Graefen, A., Ball, M. et al. New insights into the Tyrolean Iceman's origin and phenotype as inferred by whole-genome sequencing. Nat Commun 3, 698 (2012). <https://doi.org/10.1038/ncomms1701>. See [iceman_data_prep.sh](...) for a script to prepare the data in the minimal version assumed here.
 
 :::

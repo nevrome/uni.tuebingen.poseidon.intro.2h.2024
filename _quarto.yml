@@ -30,7 +30,7 @@ website:
 
 format:
   html:
-    theme: litera
+    theme: yeti
     css: styles.css
     toc: true
 
