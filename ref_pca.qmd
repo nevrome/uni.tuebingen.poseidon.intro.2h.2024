@@ -6,3 +6,124 @@ execute:
   eval: false
 engine: knitr
 ---
+
+```{bash}
+mkdir scratch
+cd scratch
+```
+
+```{bash}
+wget https://github.com/poseidon-framework/poseidon-hs/releases/latest/download/trident-Linux
+mv trident-Linux trident
+chmod +x trident
+./trident -h
+```
+
+```{bash}
+trident list --remote --packages
+```
+
+```{bash}
+wget https://raw.githubusercontent.com/nevrome/mobest.analysis.2022/master/code/01_data_preparation/modern_western_eurasian_populations.txt
+mkdir data
+trident fetch -d data --fetchFile modern_western_eurasian_populations.txt
+```
+
+
+```{bash}
+trident fetch -d data -f "*2012_KellerNatureCommunications*"
+```
+
+```{bash}
+trident list -d data/2012_KellerNatureCommunications-2.1.1 --individuals
+cd data/2012_KellerNatureCommunications-2.1.1
+rm *.yml *.md *.bib *.janno
+```
+
+```{bash}
+trident list --remote --individuals | grep "RISE434"
+trident fetch -d data -f "<RISE434.SG>"
+```
+
+```{bash}
+cd data/2015_AllentoftNature-2.1.1
+rm *.yml *.md *.bib
+```
+
+```{bash}
+trident forge \
+  -p data/2012_KellerNatureCommunications-2.1.1/2012_KellerNatureCommunications.bed \
+  -p data/2015_AllentoftNature-2.1.1/2015_AllentoftNature.bed \
+  -f "<Iceman.SG>,<RISE434.SG>" \
+  --onlyGeno \
+  -o myOwnData
+```
+
+```{bash}
+trident forge \
+  -d data \
+  --forgeFile modern_western_eurasian_populations.txt \
+  -p myOwnData/myOwnData.bed \
+  -f "<Iceman.SG>,<RISE434.SG>" \
+  --intersect \
+  --outFormat EIGENSTRAT \
+  -o myDataWithRef
+```
+
+```{bash}
+qjanno "SELECT * FROM d(myDataWithRef)" -c
+
+qjanno "
+SELECT Poseidon_ID, Group_Name, row_number() OVER (PARTITION BY Group_Name ORDER BY random()) rn
+FROM d(myDataWithRef)
+" --raw > huhu.txt
+
+qjanno "
+SELECT '<'||Poseidon_ID||'>'
+FROM huhu.txt
+WHERE rn <= 2
+ORDER BY Group_Name DESC;
+" --raw --noOutHeader | wc -l
+```
+
+```{bash}
+trident summarise -d myPac
+```
+
+```{bash}
+trident survey -d myPac
+```
+
+```{bash}
+#trident genoconvert -d myPac --outFormat EIGENSTRAT
+```
+
+.bib file
+
+```{r}
+ind <- readr::read_tsv(
+  "scratch/myDataWithRef/myDataWithRef.ind",
+  col_names = c("id", "sex", "pop")
+)
+
+pca_out <- smartsnp::smart_pca(
+  "scratch/myDataWithRef/myDataWithRef.geno",
+  sample_group = seq_len(nrow(ind)),
+  missing_impute = "mean",
+  sample_project = which(ind$id == "Iceman.SG"),
+  pc_axes = 2
+)
+
+saveRDS(pca_out, file = "scratch/pca_out.rds")
+```
+
+```{r}
+pca_out <- readRDS("scratch/pca_out.rds")
+
+library(magrittr)
+library(ggplot2)
+
+pca_out$pca.sample_coordinates %>%
+  ggplot() +
+  geom_point(aes(x = PC1, y = PC2, color = Class))
+```

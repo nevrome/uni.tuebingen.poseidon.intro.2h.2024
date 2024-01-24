@@ -1,5 +1,4 @@
 ---
-title: "About"
 editor_options: 
   chunk_output_type: inline
 execute: 
@@ -7,123 +6,139 @@ execute:
 engine: knitr
 ---
 
+### Preparing a Poseidon package
+
+#### Creating a working space
+
+We're going to need some scratch space for this analysis, so we create a new directory `scratch`.
+
 ```{bash}
 mkdir scratch
 cd scratch
 ```
 
+We then copy the data we received from Prof. P. there into a directory `iceGeno`.
+
+#### Installing trident
+
+As we want to use Poseidon for this analysis, we have to install its main software tool: [`trident`](https://www.poseidon-adna.org/#/trident). On Linux we can simply install it on the command line. On Windows and macOS security features of the operating system complicate the installation.
+
 ```{bash}
+# download the current stable release binary
 wget https://github.com/poseidon-framework/poseidon-hs/releases/latest/download/trident-Linux
+# rename it to simply trident
 mv trident-Linux trident
+# make it executable
 chmod +x trident
+# run it to test if it is working
 ./trident -h
 ```
 
-```{bash}
-trident list --remote --packages
-```
+With trident ready and running we can turn to the data.
+
+#### Turning the data into a Poseidon package
+
+At the moment we only have the EIGENSTRAT data. This is sufficient to work with `trident`, which supports direct handling of genotype data through the `-p`/`--genoOne` flag.
+
+But as we already know that we want to incorporate context information, for example the coordinates we received from Prof. P., we will create a Poseidon package for this data.
+
+We can do so with `trident`'s `init` subcommand, which wraps genotype data into Poseidon packages.
+
+By running
 
 ```{bash}
-wget https://raw.githubusercontent.com/nevrome/mobest.analysis.2022/master/code/01_data_preparation/modern_western_eurasian_populations.txt
-mkdir data
-trident fetch -d data --fetchFile modern_western_eurasian_populations.txt
+./trident init \
+  -p iceGeno/ice.geno \
+  -o ice
 ```
 
+we turn
+
+```
+iceGeno
+├── ice.geno
+├── ice.ind
+└── ice.snp
+```
+
+into
+
+```
+ice
+├── ice.bib
+├── ice.geno
+├── ice.ind
+├── ice.janno
+├── ice.snp
+└── POSEIDON.yml
+```
+
+The `POSEIDON.yml` defines the package. `init` returns a technically valid template, which we can simplify for now.
+
+```{filename="POSEIDON.yml (automatically generated)"}
+poseidonVersion: 2.7.1
+title: ice
+description: Empty package template. Please add a description
+contributor:
+- name: Josiah Carberry
+  email: carberry@brown.edu
+  orcid: 0000-0002-1825-0097
+packageVersion: 0.1.0
+lastModified: 2024-01-24
+genotypeData:
+  format: EIGENSTRAT
+  genoFile: ice.geno
+  snpFile: ice.snp
+  indFile: ice.ind
+  snpSet: Other
+jannoFile: ice.janno
+bibFile: ice.bib
+```
+
+```{filename="POSEIDON.yml (modified)"}
+poseidonVersion: 2.7.1
+title: ice
+packageVersion: 0.1.0
+lastModified: 2024-01-24
+genotypeData:
+  format: EIGENSTRAT
+  genoFile: ice.geno
+  snpFile: ice.snp
+  indFile: ice.ind
+  snpSet: 1240K
+jannoFile: ice.janno
+```
+
+We can delete the `.bib` file, as we have no literature references for our new sample yet.
+
+The generated `.janno` file features a lot of empty columns. We can delete them for the time being and only keep and fill the ones for which we have information: `Latitude` and `Longitude`.
+
+::: {.table-responsive}
+
+|Poseidon_ID|Genetic_Sex|Group_Name|Alternative_IDs|Relation_To|Relation_Degree|Relation_Type|Relation_Note|Collection_ID|Country|Country_ISO|Location|Site|Latitude|Longitude|Date_Type|Date_C14_Labnr|Date_C14_Uncal_BP|Date_C14_Uncal_BP_Err|Date_BC_AD_Start|Date_BC_AD_Median|Date_BC_AD_Stop|Date_Note|MT_Haplogroup|Y_Haplogroup|Source_Tissue|Nr_Libraries|Library_Names|Capture_Type|UDG|Library_Built|Genotype_Ploidy|Data_Preparation_Pipeline_URL|Endogenous|Nr_SNPs|Coverage_on_Target_SNPs|Damage|Contamination|Contamination_Err|Contamination_Meas|Contamination_Note|Genetic_Source_Accession_IDs|Primary_Contact|Publication|Note|Keywords|
+|-----------|-----------|----------|---------------|-----------|---------------|-------------|-------------|-------------|-------|-----------|--------|----|--------|---------|---------|--------------|-----------------|---------------------|----------------|-----------------|---------------|---------|-------------|------------|-------------|------------|-------------|------------|---|-------------|---------------|-----------------------------|----------|-------|-----------------------|------|-------------|-----------------|------------------|------------------|----------------------------|---------------|-----------|----|--------|
+|ice        |M          |iceG      |n/a            |n/a        |n/a            |n/a          |n/a          |n/a          |n/a    |n/a        |n/a     |n/a |n/a     |n/a      |n/a      |n/a           |n/a              |n/a                  |n/a             |n/a              |n/a            |n/a      |n/a          |n/a         |n/a          |n/a         |n/a          |n/a         |n/a|n/a          |n/a            |n/a                          |n/a       |n/a    |n/a                    |n/a   |n/a          |n/a              |n/a               |n/a               |n/a                         |n/a            |n/a        |n/a |n/a     |
+
+:::
+
+::: {.table-responsive}
+
+|Poseidon_ID|Genetic_Sex|Group_Name|Latitude|Longitude|
+|-----------|-----------|----------|--------|---------|
+|ice        |M          |iceG      |46.77   |10.83    |
+
+:::
+
+#### Validating our Poseidon package
+
+After all these manual changes we should confirm that the package is still structurally valid and computer-readable.
+
+`trident` has a special subcommand for that: `validate`.
 
 ```{bash}
-trident fetch -d data -f "*2012_KellerNatureCommunications*"
+./trident validate -d ice
 ```
 
-```{bash}
-trident list -d data/2012_KellerNatureCommunications-2.1.1 --individuals
-cd data/2012_KellerNatureCommunications-2.1.1
-rm *.yml *.md *.bib *.janno
-```
+If we did everything right, then the validation should pass. Otherwise we should go back to the package an fix it. `trident` only reads valid packages. If we encounter an issue we may get more information about it by running trident with the `--debug` flag.
 
-```{bash}
-trident list --remote --individuals | grep "RISE434"
-trident fetch -d data -f "<RISE434.SG>"
-```
-
-```{bash}
-cd data/2015_AllentoftNature-2.1.1
-rm *.yml *.md *.bib
-```
-
-```{bash}
-trident forge \
-  -p data/2012_KellerNatureCommunications-2.1.1/2012_KellerNatureCommunications.bed \
-  -p data/2015_AllentoftNature-2.1.1/2015_AllentoftNature.bed \
-  -f "<Iceman.SG>,<RISE434.SG>" \
-  --onlyGeno \
-  -o myOwnData
-```
-
-```{bash}
-trident forge \
-  -d data \
-  --forgeFile modern_western_eurasian_populations.txt \
-  -p myOwnData/myOwnData.bed \
-  -f "<Iceman.SG>,<RISE434.SG>" \
-  --intersect \
-  --outFormat EIGENSTRAT \
-  -o myDataWithRef
-```
-
-```{bash}
-qjanno "SELECT * FROM d(myDataWithRef)" -c
-
-qjanno "
-SELECT Poseidon_ID, Group_Name, row_number() OVER (PARTITION BY Group_Name ORDER BY random()) rn
-FROM d(myDataWithRef)
-" --raw > huhu.txt
-
-qjanno "
-SELECT '<'||Poseidon_ID||'>'
-FROM huhu.txt
-WHERE rn <= 2
-ORDER BY Group_Name DESC;
-" --raw --noOutHeader | wc -l
-```
-
-```{bash}
-trident summarise -d myPac
-```
-
-```{bash}
-trident survey -d myPac
-```
-
-```{bash}
-#trident genoconvert -d myPac --outFormat EIGENSTRAT
-```
-
-.bib file
-
-```{r}
-ind <- readr::read_tsv(
-  "scratch/myDataWithRef/myDataWithRef.ind",
-  col_names = c("id", "sex", "pop")
-)
-
-pca_out <- smartsnp::smart_pca(
-  "scratch/myDataWithRef/myDataWithRef.geno",
-  sample_group = seq_len(nrow(ind)),
-  missing_impute = "mean",
-  sample_project = which(ind$id == "Iceman.SG"),
-  pc_axes = 2
-)
-
-saveRDS(pca_out, file = "scratch/pca_out.rds")
-```
-
-```{r}
-pca_out <- readRDS("scratch/pca_out.rds")
-
-library(magrittr)
-library(ggplot2)
-
-pca_out$pca.sample_coordinates %>%
-  ggplot() +
-  geom_point(aes(x = PC1, y = PC2, color = Class))
-```
+`validate` supports not just the validation of whole packages, but also of individual files, e.g. `.janno`, `.geno` or `.bib` files. It can also ignore the genotype data with `--ignoreGeno`, or parse the whole genotype data files with `--fullGeno`. As a default it attempts to parse the first 100 SNPs.
