@@ -10,12 +10,20 @@ website:
     contents:
       - href: index.qmd
         text: Overview
-      - href: trident.qmd
-        text: Data management with trident
-      - href: analysis.qmd
-        text: Interfaces for queries and data analysis
-      - href: archives.qmd
-        text: Interacting with the public data archives
+      - section: "Workflow"
+        contents:
+          - href: backstory.qmd
+            text: Backstory
+          - href: data_prep.qmd
+            text: Data preparation
+          - href: ref_pca.qmd
+            text: Reference data and a first PCA
+          - href: spacetime.qmd
+            text: Spatiotemporal context data
+          - href: fstats.qmd
+            text: F-statistics
+          - href: data_pub.qmd
+            text: Data publication
       - href: https://github.com/nevrome/uni.tuebingen.poseidon.intro.2h.2024
         text: This page on GitHub
         icon: github
