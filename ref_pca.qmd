@@ -206,7 +206,7 @@ SELECT Poseidon_ID,
 FROM   d(iceWithRef)
 " --raw > id_per_sample.txt
 cat id_per_sample.txt
-# subset samples from that list
+# subset samples from that list and render a forge selection language file
 qjanno "
 SELECT   '<'||Poseidon_ID||'>'
 FROM     id_per_sample.txt
@@ -231,30 +231,51 @@ trident summarize -d iceWithRefSmall
 
 ## Perform a PCA analysis
 
+After all these technicalities we can finally go back to the scientific question that motivated all of this: What is the genetic profile of the ice mummy Prof. P. had found in the Tyrolean Alps?
+
+Here we use the `smart_pca()` function from the [`smartsnp` R package](https://github.com/cran/smartsnp).
+
 ```{r}
+# read the ind file
 ind <- readr::read_tsv(
-  "scratch/myDataWithRef/myDataWithRef.ind",
+  "scratch/iceWithRefSmall/iceWithRefSmall.ind",
   col_names = c("id", "sex", "pop")
 )
-
+# run smart_snp() with the iceWithRefSmall dataset
 pca_out <- smartsnp::smart_pca(
-  "scratch/myDataWithRef/myDataWithRef.geno",
+  "scratch/iceWithRefSmall/iceWithRefSmall.geno",
   sample_group = seq_len(nrow(ind)),
   missing_impute = "mean",
-  sample_project = which(ind$id == "Iceman.SG"),
+  # project the "ice" sample in the pca space constructed
+  # with modern reference data
+  sample_project = which(ind$id == "ice"),
   pc_axes = 2
 )
-
-saveRDS(pca_out, file = "scratch/pca_out.rds")
 ```
 
 ```{r}
-pca_out <- readRDS("scratch/pca_out.rds")
+#saveRDS(pca_out, file = "scratch/pca_out2.rds")
+#pca_out <- readRDS("scratch/pca_out2.rds")
+```
 
+```{r}
 library(magrittr)
 library(ggplot2)
 
-pca_out$pca.sample_coordinates %>%
+p <- pca_out$pca.sample_coordinates %>%
   ggplot() +
-  geom_point(aes(x = PC1, y = PC2, color = Class))
+  geom_point(
+    aes(x = PC1, y = PC2, color = Class)
+  ) +
+  scale_y_reverse() +
+  coord_fixed()
 ```
+
+```{r, echo=FALSE}
+ggsave(
+  "img/pca1.png",
+  plot = p
+)
+```
+
+![](img/pca1.png)
