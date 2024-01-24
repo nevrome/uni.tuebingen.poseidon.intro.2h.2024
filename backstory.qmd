@@ -7,4 +7,29 @@ execute:
 engine: knitr
 ---
 
-It is the year 2024 in an alternative universe. You are a student of archaeogenetics at Tübingen university. One cold 
+It is the year 2024 in an alternative universe. You are a student of archaeogenetics at Tübingen university. One cold February afternoon you receive a cryptic email from your professor. You have not seen him for months, when he had left for an expedition in the Tyrolean Alps.
+
+> My dear student,
+> 
+> we made an incredible discovery at 46.77° N, 10.83° E! You have to look at this data immediately. I will contact you, when I know more.
+>
+> Best,
+> CP
+
+Attached you find multiple files. First this incredible photograph:
+
+![](img/the_discovery.jpeg){width=60% fig-align="center"}
+
+But then also genotype data files in EIGENSTRAT format:
+
+
+They seem to feature the SNPs for a single individual. With a lot of missing values, but enough to work with. You are justifiably concerned about the ethical implications of working with a sample you know so little about, but you put these concerns aside for the moment. It is data analysis time!
+
+
+***
+
+::: {style="font-size: 60%;"}
+
+The "photograph" is AI-generated with the following prompt: "A film still of a famous German mountain climber and the Yeti discovering an Ice mummy in the Tyrolean Alps". Made with Microsoft Bing Image Creator.
+
+:::
