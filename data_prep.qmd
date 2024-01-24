@@ -4,11 +4,12 @@ editor_options:
 execute: 
   eval: false
 engine: knitr
+shift-heading-level-by: 1
 ---
 
-### Preparing a Poseidon package
+# Preparing a Poseidon package
 
-#### Creating a working space
+## Creating a working space
 
 We're going to need some scratch space for this analysis, so we create a new directory `scratch`.
 
@@ -19,7 +20,7 @@ cd scratch
 
 We then copy the data we received from Prof. P. there into a directory `iceGeno`.
 
-#### Installing trident
+## Installing trident
 
 As we want to use Poseidon for this analysis, we have to install its main software tool: [`trident`](https://www.poseidon-adna.org/#/trident). On Linux we can simply install it on the command line. On Windows and macOS security features of the operating system complicate the installation.
 
@@ -36,7 +37,7 @@ chmod +x trident
 
 With trident ready and running we can turn to the data.
 
-#### Turning the data into a Poseidon package
+## Turning the data into a Poseidon package
 
 At the moment we only have the EIGENSTRAT data. This is sufficient to work with `trident`, which supports direct handling of genotype data through the `-p`/`--genoOne` flag.
 
@@ -129,7 +130,7 @@ The generated `.janno` file features a lot of empty columns. We can delete them 
 
 :::
 
-#### Validating our Poseidon package
+## Validating our Poseidon package
 
 After all these manual changes we should confirm that the package is still structurally valid and computer-readable.
 
