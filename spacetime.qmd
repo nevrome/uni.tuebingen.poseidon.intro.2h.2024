@@ -115,22 +115,77 @@ After implementing the change we should again check the structural validity of t
 trident validate -d ice
 ```
 
-## Using spatial and temporal 
+## Spatial and temporal data in .janno files
+
+With the data in, we can load the .janno file for our sample.
 
 ```{r}
-library(magrittr)
-library(ggplot2)
-
-my_janno <- janno::read_janno("scratch/data/2015_AllentoftNature-2.1.1/2015_AllentoftNature.janno")
-
-my_janno_age <- my_janno %>% janno::process_age()
-
-my_janno_age %>%
-  dplyr::select(Poseidon_ID, Date_BC_AD_Median, Date_BC_AD_Sample) %>%
-  dplyr::arrange(Date_BC_AD_Median) %>%
-  dplyr::mutate(Poseidon_ID = factor(Poseidon_ID, levels = Poseidon_ID)) %>%
-  tidyr::unnest(cols = Date_BC_AD_Sample) %>%
-  ggplot() +
-  geom_violin(aes(x = Poseidon_ID, y = Date_BC_AD_Sample))
+ice_janno <- janno::read_janno("scratch/ice")
 ```
 
+As the `janno` class is derived from `tibble` we can easily transform it to a spatial object as e.g. specified by the `sf` library. And we can then plot it together with arbitrary spatial reference data to create map.
+
+```{r}
+ice_sf <- ice_janno %>%
+  sf::st_as_sf(coords = c("Longitude", "Latitude"), crs = 4326)
+
+hu <- rnaturalearth::ne_coastline()
+
+p <- ggplot() +
+  geom_sf(data = hu) +
+  geom_sf(data = ice_sf, color = "red") +
+  coord_sf(xlim = c(-5,25), ylim = c(35, 60))
+```
+
+```{r, echo=FALSE}
+ggsave(
+  "img/map.png",
+  plot = p
+)
+```
+
+![](img/map.png)
+
+For temporal information, the `janno::process_age()` function can handle all age data that can be specified for an individual sample in a Poseidon package. For C14 date calibration it runs (sum)calibration through the [`Bchron` R package](https://github.com/andrewcparnell/Bchron/) to generate a post-calibration probability distribution, which in turn can be used for derived measures.
+
+`process_age()` thus appends up to five additional list columns to the `janno` file:
+
+```{r}
+ice_janno$Date_BC_AD_Start <-NA
+ice_janno$Date_BC_AD_Stop <-NA
+ice_age <- ice_janno %>% janno::process_age()
+
+ice_age$Date_BC_AD_Start_Derived
+ice_age$Date_BC_AD_Median_Derived
+ice_age$Date_BC_AD_Stop_Derived
+```
+
+We can plot the distribution just as Oxcal would do it for us.
+
+```{r}
+prob <- ice_age$Date_BC_AD_Prob[[1]]
+
+p <- ggplot() +
+  ggridges::geom_ridgeline(
+    data = prob,
+    mapping = aes(x = age, height = sum_dens, y = "sample 1"), scale = 30
+  ) +
+  geom_line(
+    data = prob %>%
+      dplyr::mutate(ts = cumsum(two_sigma != dplyr::lag(two_sigma, default = FALSE))) %>%
+      dplyr::filter(two_sigma),
+    mapping = aes(x = age, y = "sample 1", group = ts),
+    position = position_nudge(y = -0.1)
+  )
+```
+
+```{r, echo=FALSE}
+ggsave(
+  "img/c14ridge.png",
+  plot = p
+)
+```
+
+![](img/c14ridge.png)
+
+Though the ages sampled from the distribution in `ice_age$Date_BC_AD_Sample` may be more important for derived applications.
