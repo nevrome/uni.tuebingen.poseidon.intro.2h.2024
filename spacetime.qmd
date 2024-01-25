@@ -10,9 +10,56 @@ shift-heading-level-by: 1
 
 # Working with .janno context information in R
 
-To enrich our data analysis and visualization an R-based workflow might be helpful for some. This is especially relevant if we want to incorporate spatial and temporal information.
+For data analysis and visualization an R-based workflow may be helpful. This is especially relevant if we want to incorporate spatial and temporal information.
 
-## janno
+## Adding new information to the .janno file
+
+As a first step we add the new information we received from Prof. P. to our Poseidon package `ice`. We do so by editing the .janno file at `ice/ice.janno`.
+
+Starting from
+
+::: {.table-responsive}
+
+|Poseidon_ID|Genetic_Sex|Group_Name|Latitude|Longitude|
+|-----------|-----------|----------|--------|---------|
+|ice        |M          |iceG      |46.77   |10.83    |
+
+:::
+
+we add three additional columns as defined in the documentation here.
+
+::: {.table-responsive}
+
+|Date_Type  |Date_C14_Uncal_BP|Date_C14_Uncal_BP_Err|
+|-----------|-----------------|---------------------|
+|C14        |4555             |34                   |
+
+:::
+
+As we want to work particularly neatly we document this change to the package in a changelog, which we add to the package in the form of a `CHANGELOG.md` file.
+
+```{filename="CHANGELOG.md"}
+- V 0.2.0: Added a radiocarbon date for the ice sample.
+```
+
+We also update the package version number in our `POSEIDON.yml` file and link the changelog file there:
+
+```{filename="POSEIDON.yml"}
+poseidonVersion: 2.7.1
+title: ice
+packageVersion: 0.2.0
+lastModified: 2024-01-24
+...
+changelogFile: CHANGELOG.md
+```
+
+After implementing the change we should again check the structural validity of the package with `trident validate`.
+
+```{bash}
+trident validate -d ice
+```
+
+## Loading .janno files in R
 
 We previously prepared the 
 
