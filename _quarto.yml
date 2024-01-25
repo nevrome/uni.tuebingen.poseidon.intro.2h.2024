@@ -12,12 +12,14 @@ website:
         text: Overview
       - section: "Workflow"
         contents:
-          - href: backstory.qmd
-            text: Backstory
+          - href: backstory1.qmd
+            text: Backstory 1 - A message from Prof. P.
           - href: data_prep.qmd
             text: Data preparation
           - href: ref_pca.qmd
             text: Reference data and PCA
+          - href: backstory2.qmd
+            text: Backstory 2 - Prof. P. again
           - href: spacetime.qmd
             text: Spatiotemporal context data
           - href: fstats.qmd

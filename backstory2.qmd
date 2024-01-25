@@ -1,0 +1,35 @@
+---
+editor_options: 
+  chunk_output_type: inline
+execute: 
+  eval: false
+engine: knitr
+---
+
+## Another message from Prof. P.
+
+Just while you still ogle at the first PCA result you receive another email from Prof. P. with a second photograph from the field lab. 
+
+> My dear student,
+> 
+> we made tremendous progress with our preliminary analysis!
+> Here's the radiocarbon age we measured from the mummy:
+>
+> 4555 ± 34 BP
+>
+> Please send me a PCA, a map and the calibration for this date as soon as possible!
+>
+> Best,
+> CP
+
+![](img/the_analysis.jpeg){width=60% fig-align="center"}
+
+That sounds urgent! Pretty exciting! You get to work right away.
+
+***
+
+::: {style="font-size: 60%;"}
+
+- The "photograph" is AI-generated with the following prompt: "A film still of the frozen hand of an ice mummy in a mass spectrometer. In the background the yeti works on the massive machine". Made with Microsoft Bing Image Creator.
+
+:::

@@ -6,3 +6,19 @@ execute:
   eval: false
 engine: knitr
 ---
+
+## xerxes
+
+```{bash}
+xerxes fstats -d data \
+    --stat "F3(Nganasan,French,Finnish)" \
+    --stat "F3(Nganasan, Icelandic, Finnish)" \
+    --stat "F3(Nganasan, Lithuanian, Finnish)" \
+    --stat "F3(Nganasan, Norwegian, Finnish)" \
+    --stat "F3(Russia_Bolshoy, French, Finnish)" \
+    --stat "F3(Russia_Bolshoy, Icelandic, Finnish)" \
+    --stat "F3(Russia_Bolshoy, Lithuanian, Finnish)" \
+    --stat "F3(Russia_Bolshoy, Norwegian, Finnish)"
+```
+
+https://mpi-eva-archaeogenetics.github.io/comp_human_adna_book/fstats.html
