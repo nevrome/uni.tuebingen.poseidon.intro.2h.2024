@@ -1,24 +1,60 @@
 ---
-title: "About"
 editor_options: 
   chunk_output_type: inline
 execute: 
   eval: false
 engine: knitr
+shift-heading-level-by: 1
 ---
 
-## xerxes
+# F-statistics with Poseidon packages
+
+Understanding sample positions in PCA-, spatial- and temporal space are fundamentals of any archaeogenetic research project. But so are also various other methods for data exploration and statistical inference. For F-statistics Poseidon features the dedicated [`xerxes` software tool](https://www.poseidon-adna.org/#/xerxes).
+
+## Installing xerxes
+
+We can install `xerxes` just as `trident` and `qjanno` (there is no windows version, though):
 
 ```{bash}
-xerxes fstats -d data \
-    --stat "F3(Nganasan,French,Finnish)" \
-    --stat "F3(Nganasan, Icelandic, Finnish)" \
-    --stat "F3(Nganasan, Lithuanian, Finnish)" \
-    --stat "F3(Nganasan, Norwegian, Finnish)" \
-    --stat "F3(Russia_Bolshoy, French, Finnish)" \
-    --stat "F3(Russia_Bolshoy, Icelandic, Finnish)" \
-    --stat "F3(Russia_Bolshoy, Lithuanian, Finnish)" \
-    --stat "F3(Russia_Bolshoy, Norwegian, Finnish)"
+# download the current stable release binary
+wget https://github.com/poseidon-framework/poseidon-analysis-hs/releases/latest/download/xerxes-Linux
+# rename it to simply xerxes
+mv xerxes-Linux xerxes
+# make it executable
+chmod +x xerxes
+# run it to test if it is working
+./xerxes -h
 ```
 
-https://mpi-eva-archaeogenetics.github.io/comp_human_adna_book/fstats.html
+`xerxes` also supports some other experimental features, but only its implementation of F-statistics is stable right now.
+
+## Calculating F-statistics with xerxes
+
+For the ice mummy we previously concluded from the PCA plot, that it seems to feature an ancestry profile not unlike the of what we can observe for present day Sardinians. We can confirm this with a number of F4-statistics...
+
+```{bash}
+trident fetch -d ref_data -f "*Reference_Genomes*"
+trident fetch -d ref_data -f "*2016_LazaridisNature*"
+
+xerxes fstats -d ref_data \
+  --stat 'F4(<Chimp.REF>,<Iceman.SG>,English,French)' \
+  --stat 'F4(<Chimp.REF>,<Iceman.SG>,Sardinian,French)'
+```
+
+- stream processing
+
+[writeup](https://mpi-eva-archaeogenetics.github.io/comp_human_adna_book/fstats.html)
+
+```{file.name="f4.config"}
+fstats:
+- type: F4
+  a: ["<Chimp.REF>"]
+  b: ["<Iceman.SG>"]
+  c: ["English", "Sardinian"]
+  d: ["French"]
+```
+
+```{bash}
+xerxes fstats -d ref_data \
+  --statConfig f4.config
+```
