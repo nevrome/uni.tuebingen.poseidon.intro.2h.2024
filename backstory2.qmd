@@ -30,6 +30,6 @@ That sounds urgent! Pretty exciting! You get to work right away.
 
 ::: {style="font-size: 60%;"}
 
-- The "photograph" is AI-generated with the following prompt: "A film still of the frozen hand of an ice mummy in a mass spectrometer. In the background the yeti works on the massive machine". Made with Microsoft Bing Image Creator.
+- Prompt for the "photograph": "A film still of the frozen hand of an ice mummy in a mass spectrometer. In the background the yeti works on the massive machine". Made with Microsoft Bing Image Creator.
 
 :::

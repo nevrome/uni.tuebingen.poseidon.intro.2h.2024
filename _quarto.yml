@@ -27,6 +27,9 @@ website:
             text: Spatiotemporal context data
           - href: fstats.qmd
             text: F-statistics
+          - icon: envelope
+            href: backstory3.qmd
+            text: Your publication
           - href: data_pub.qmd
             text: Data publication
       - href: https://github.com/nevrome/uni.tuebingen.poseidon.intro.2h.2024

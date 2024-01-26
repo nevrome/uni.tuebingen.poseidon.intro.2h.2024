@@ -1,0 +1,34 @@
+---
+editor_options: 
+  chunk_output_type: inline
+execute: 
+  eval: false
+engine: knitr
+---
+
+## Concluding another project
+
+Many months have passed. You prepared, submitted and resubmitted an excellent manuscript about the ice mummy. The journal just wrote you, that the paper will be published on this very day.
+
+In this glorious moment you see another email from Prof. P..
+
+> My dear student,
+> 
+> There is just one last thing to do: We have to share the genotype data, so that the community can reproduce our analysis!
+>
+> Can you please submit our package to the Poseidon community archive?
+>
+> Best,
+> CP
+
+![](img/the_celebration.jpeg){width=60% fig-align="center"}
+
+One last step to complete this project! Fortunately the package is almost publication-ready, after you worked with it extensively for the last months. But how does this submission work?
+
+***
+
+::: {style="font-size: 60%;"}
+
+- Prompt for the "photograph": "A film still of a happy german mountaineer with a green jacket in a mountain landscape. The mountaineer holds a manuscript. The yeti is with him." Made with Microsoft Bing Image Creator.
+
+:::
