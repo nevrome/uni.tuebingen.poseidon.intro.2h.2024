@@ -1,11 +1,13 @@
 ---
-title: "About"
 editor_options: 
   chunk_output_type: inline
 execute: 
   eval: false
 engine: knitr
+shift-heading-level-by: 1
 ---
+
+# Submitting a package to the Poseidon community archive
 
 ```{bash}
 trident validate -d myPac
@@ -14,3 +16,69 @@ trident validate -d myPac
 ```{bash}
 trident rectify -d myPac
 ```
+
+This tutorial explains the main cornerstones of a workflow to add a new Poseidon package to the community archive after publishing the corresponding dataset. The process is documented in more detail in a [**Submission guide**](https://www.poseidon-adna.org/#/archive_submission_guide) on the website.
+
+1.  **Make yourself familiar** with a number of core technologies. This is less daunting than it sounds, because: Superficial knowledge is sufficient and knowing them is useful beyond this particular task.
+
+-   Creating and validating Poseidon packages with the `trident` tool.
+-   Free and open source distributed version control with [Git](https://git-scm.com).
+-   Collaborative working on Git projects with [GitHub](https://github.com).
+-   Handling large files in Git using [Git LFS](https://git-lfs.com).
+
+***
+
+-   In a next step we modify `POSEIDON.yml`, `.janno` and `.bib` to include the context information we consider relevant. All of these files are well specified and documented, so we only demonstrate a minimal change for this example:
+
+    We replace the main contributor for the package.
+
+    ``` {filename="myPackage/POSEIDON.yml"}
+    poseidonVersion: 2.7.1
+    title: myPackage
+    description: Empty package template. Please add a description
+    contributor:
+    - name: Clemens Schmid               #- name: Josiah Carberry
+      email: clemens_schmid@eva.mpg.de   #  email: carberry@brown.edu
+      orcid: 0000-0003-3448-5715         #  orcid: 0000-0002-1825-0097
+    packageVersion: 0.1.0
+    lastModified: 2023-10-18
+    genotypeData:
+      format: EIGENSTRAT
+      genoFile: myData.geno
+      snpFile: myData.snp
+      indFile: myData.ind
+      snpSet: Other
+    jannoFile: myPackage.janno
+    bibFile: myPackage.bib
+    ```
+
+-   When we applied all necessary modifications we can confirm that the package is still valid with `trident validate -d myPackage`.
+
+3.  **Submit the package** to the community archive.
+
+-   To submit the package we have to create a fork of the [community archive repository on GitHub](https://github.com/poseidon-framework/community-archive). This requires a GitHub account.
+
+![Press the fork button in the top right corner to fork a repository on GitHub](img/poseidon/fork.png)
+
+-   And then clone the fork to our computer, while omitting the large genotype data files. Note that this requires several setup steps to work correctly:
+
+    -   Git has be installed for your computer (see [here](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git))
+    -   You must have created an ssh key pair to connect to GitHub via ssh (see [here](https://docs.github.com/en/authentication/connecting-to-github-with-ssh))
+    -   Git LFS has to be installed (see [here](https://git-lfs.com)) and and configured for your user with `git lfs install`
+
+    ``` bash
+    GIT_LFS_SKIP_SMUDGE=1 git clone git@github.com:<yourGitHubUserName>/community-archive.git
+    ```
+
+-   With the cloned repository on our system we can copy the files into the repositories directory and commit the changes.
+
+    ``` {.bash filename="in the community-archive directory"}
+    cp -r ../myPackage myPackage
+    git add myPackage
+    git commit -m "added a first draft of myPackage"
+    git push
+    ```
+
+-   In a last step we can open a Pull Request on GitHub from our fork to the original archive repository. Poseidon core members will take it from here.
+
+![When you pushed to your fork, GitHub will automatically offer to "contribute" to the source repository](img/poseidon/pull_request.png)
