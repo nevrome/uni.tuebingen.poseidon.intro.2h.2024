@@ -1,5 +1,6 @@
 ---
-title: "About"
+title: A short introduction to the Poseidon genotype data management framework
+subtitle: Tübingen University, February 2024
 editor_options: 
   chunk_output_type: inline
 execute: 
@@ -7,4 +8,19 @@ execute:
 engine: knitr
 ---
 
-...
+This website was created to support a ~2h demonstration of Poseidon and some of its tools, features and components for students and other practitioners of archaeogenetics. Read more about Poseidon at <https://www.poseidon-adna.org/>.
+
+
+The introduction begins with the overview slides below, then shows some concrete applications and workflows on the command line, motivated by a little narrative framework.
+
+![](Poseidon_Tuebingen_February_2024.pdf){fig-alt="PDF document with Poseidon overview slides." width=100% height=480}
+
+This course was prepared and presented by [Clemens Schmid](https://orcid.org/0000-0003-3448-5715).
+
+It relies on the following Poseidon standard and software versions:
+
+- Poseidon schema v2.7.1
+- trident v1.4.0.3
+- qjanno v1.0.0.0
+- janno R package v1.0.0
+- xerxes v1.0.0.1

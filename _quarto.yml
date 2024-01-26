@@ -7,19 +7,22 @@ website:
     style: "floating"
     search: true
     border: true
+    logo: img/Poseidon-Logo-Horizontal-WhiteLrg.png
     contents:
       - href: index.qmd
         text: Overview
-      - section: "Workflow"
+      - section: "Demo"
         contents:
-          - href: backstory1.qmd
-            text: Backstory 1 - A message from Prof. P.
+          - icon: envelope
+            href: backstory1.qmd
+            text: A message from Prof. P.
           - href: data_prep.qmd
             text: Data preparation
           - href: ref_pca.qmd
             text: Reference data and PCA
-          - href: backstory2.qmd
-            text: Backstory 2 - Prof. P. again
+          - icon: envelope
+            href: backstory2.qmd
+            text: Prof. P. again
           - href: spacetime.qmd
             text: Spatiotemporal context data
           - href: fstats.qmd
@@ -32,9 +35,9 @@ website:
 
 format:
   html:
-    theme: yeti
+    theme: slate
     css: styles.css
-    toc: true
+    toc: false
 
 
 
