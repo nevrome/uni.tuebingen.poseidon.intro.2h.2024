@@ -9,7 +9,7 @@ shift-heading-level-by: 1
 
 # F-statistics with Poseidon packages
 
-Understanding sample positions in PCA-, spatial- and temporal space are fundamentals of any archaeogenetic research project. But so are also various other methods for data exploration and statistical inference. For F-statistics Poseidon features the dedicated [`xerxes` software tool](https://www.poseidon-adna.org/#/xerxes).
+Understanding sample positions in PCA-, spatial- and temporal space are fundamentals of any archaeogenetic research project. But so are also various other methods for data exploration and statistical inference. For F-statistics Poseidon features the dedicated [`xerxes`](https://www.poseidon-adna.org/#/xerxes) software tool.
 
 ## Installing xerxes
 
