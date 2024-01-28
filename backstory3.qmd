@@ -8,9 +8,9 @@ engine: knitr
 
 ## Concluding another project
 
-Many months have passed. You prepared, submitted and resubmitted an excellent manuscript about the ice mummy. The journal just wrote you, that the paper will be published on this very day.
+Many months have passed. You prepared, submitted and resubmitted an excellent manuscript about the ice mummy. The journal just wrote you that the paper will be published on this very day.
 
-In this glorious moment you see another email from Prof. P..
+In this glorious moment you see another email from Prof. P.:
 
 > My dear student,
 > 
@@ -23,12 +23,6 @@ In this glorious moment you see another email from Prof. P..
 
 ![](img/the_celebration.jpeg){width=60% fig-align="center"}
 
-One last step to complete this project! Fortunately the package is almost publication-ready, after you worked with it extensively for the last months. But how does this submission work?
+As evident from another photograph^[Prompt : "A film still of a happy german mountaineer with a green jacket in a mountain landscape. The mountaineer holds a manuscript. The yeti is with him." Made with Microsoft Bing Image Creator.], Prof. P. is already celebrating.
 
-***
-
-::: {style="font-size: 60%;"}
-
-- Prompt for the "photograph": "A film still of a happy german mountaineer with a green jacket in a mountain landscape. The mountaineer holds a manuscript. The yeti is with him." Made with Microsoft Bing Image Creator.
-
-:::
+Well - one last step to complete this project! Fortunately the package is almost publication-ready, after you worked with it extensively for the last months. But how does this submission work?

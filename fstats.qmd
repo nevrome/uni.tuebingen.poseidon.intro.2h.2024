@@ -22,7 +22,7 @@ wget https://github.com/poseidon-framework/poseidon-analysis-hs/releases/latest/
 mv xerxes-Linux xerxes
 # make it executable
 chmod +x xerxes
-<!-- # run it to test if it is working -->
+# run it to test if it is working
 ./xerxes -h
 ```
 
@@ -77,12 +77,12 @@ fstats:
   d: ["FR"]
 ```
 
-It also allow to list multiple different statistics in the `fstats` blog, which will then all be calculated in one `xerxes` run.
+It also allow to list multiple different statistics in the `fstats` block, which will then all be calculated in one `xerxes` run.
 :::
 
-The F4 test shown here is not particular interesting though - we typically want to dive much deeper and beyond modern reference genomes. One relevant question for for an ancient sample from Western Eurasia may be, to which major ancestry components it has the strongest affinities: *Western Hunter-Gatherer* ancestry, *Ancient Near-Eastern* ancestry or Steppe ancestry.
+The F4 test shown here is not particular interesting though - we typically want to dive much deeper and beyond modern reference genomes. One relevant question for for an ancient sample from Western Eurasia may be, to which major ancestry components it has the strongest affinities: *Western Hunter-Gatherer* ancestry, *Ancient Near-Eastern* ancestry or *Steppe* ancestry.
 
-Each of these components is represented by multiple ancient reference genomes, each in turn grouped into *populations* by their shared origin in space, time and by the archaeological material they are associated with. Here we run one possible outgroup-F3 test with three individual reference populations^[This test is inspired by https://doi.org/10.1016/j.xgen.2023.100377, Figure S1].
+Each of these components is represented by multiple ancient reference genomes, each in turn grouped into *populations* by their shared origin in space, time and by the archaeological material they are associated with. Here we run one possible outgroup-F3 test with three individual reference populations^[This test is inspired by @Wang2023, Figure S1].
 
 ```{bash}
 # download the various packages that include samples for the desired
@@ -112,24 +112,30 @@ p <- outgroup_f3 %>%
       x = b,
       ymin = Estimate_Jackknife - StdErr_Jackknife,
       ymax = Estimate_Jackknife + StdErr_Jackknife
-    )
+    ), width = 0.2
   ) +
   coord_flip() +
-  scale_x_discrete(limits = rev)
+  scale_x_discrete(limits = rev) +
+  theme(axis.title.y = element_blank())
 ```
 
 ```{r, echo=FALSE}
 ggsave(
   "img/outgroupf3.png",
-  plot = p
+  plot = p,
+  width = 600, height = 400,
+  dpi = 150,
+  units = "px",
+  scale = 1.2
 )
 ```
 
 ![](img/outgroupf3.png)
 
 ::: {.callout-tip}
-## Learn more
-Stephan Schiffels, the main author of `xerxes`, recently introduced F-statistics and his tool [here](https://mpi-eva-archaeogenetics.github.io/comp_human_adna_book/fstats.html).
+## Learn more about ...
+- F-statistics and how to use xerxes: [Introduction to F3- and F4-Statistics](https://mpi-eva-archaeogenetics.github.io/comp_human_adna_book/fstats.html)
+- `xerxes` algorithms and implementation details: [xerxes Whitepaper](https://github.com/poseidon-framework/poseidon-analysis-hs/blob/main/docs/xerxes_whitepaper.pdf)
 :::
 
 

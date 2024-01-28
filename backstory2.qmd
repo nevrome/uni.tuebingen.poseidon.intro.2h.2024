@@ -8,7 +8,7 @@ engine: knitr
 
 ## Another message from Prof. P.
 
-Just while you still ogle at the first PCA result you receive another email from Prof. P. with a second photograph from the field lab. 
+Just while you still ogle at the first PCA result you receive another email from Prof. P. with a second photograph^[Prompt : "A film still of the frozen hand of an ice mummy in a mass spectrometer. In the background the yeti works on the massive machine". Made with Microsoft Bing Image Creator.] from the field lab. 
 
 ![](img/the_analysis.jpeg){width=60% fig-align="center"}
 
@@ -25,11 +25,3 @@ Just while you still ogle at the first PCA result you receive another email from
 > CP
 
 That sounds urgent! You get to work right away.
-
-***
-
-::: {style="font-size: 60%;"}
-
-- Prompt for the "photograph": "A film still of the frozen hand of an ice mummy in a mass spectrometer. In the background the yeti works on the massive machine". Made with Microsoft Bing Image Creator.
-
-:::
