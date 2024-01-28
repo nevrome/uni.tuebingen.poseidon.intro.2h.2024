@@ -211,3 +211,12 @@ ggsave(
 ![](img/c14ridge.png)
 
 Though the ages sampled from the distribution in `ice_age$Date_BC_AD_Sample` may be even more important for derived applications.
+
+***
+
+::: {.callout-tip}
+## Learn more about...
+- The janno R package: [janno R package](https://www.poseidon-adna.org/#/janno_r_package)
+- The Natural Earth Data project: [Geodata download](https://www.naturalearthdata.com/downloads/)
+- The Bchron R package: [Vignette: Calibrating radiocarbon dates](https://andrewcparnell.github.io/Bchron/articles/Bchron.html#calibrating-radiocarbon-dates)
+:::
