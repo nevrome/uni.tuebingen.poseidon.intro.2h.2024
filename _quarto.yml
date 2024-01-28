@@ -41,6 +41,7 @@ format:
     theme: slate
     css: styles.css
     toc: false
+    bibliography: references.bib
 
 
 
