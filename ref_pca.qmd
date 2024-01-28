@@ -239,6 +239,12 @@ trident forge \
 trident summarize -d iceWithRefSmall
 ```
 
+::: {.callout-note}
+Note that `iceWithRefSmall` includes a `.bib` file with exactly these references needed for the (random) subset of samples we selected now. Literature references are linked to samples in Poseidon packages and `forge` moves them accordingly to newly created packages.
+
+When used consistently throughout the analysis pipeline this feature can simplify the bibliography compilation at the end.
+:::
+
 ## Performing a PCA analysis
 
 After all these technicalities we can finally go back to the scientific question that motivated all of this: What is the genetic profile of the ice mummy Prof. P. had found in the Tyrolean Alps?
