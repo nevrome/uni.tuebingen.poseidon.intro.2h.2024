@@ -13,17 +13,19 @@ With our data neatly packaged we can approach the actual challenge of reconstruc
 
 ## Acquiring modern reference data
 
-In its public [community-archive](https://www.poseidon-adna.org/#/archive_overview) the Poseidon ecosystem features a curated source of genotype data.
+In its public [community-archive](https://www.poseidon-adna.org/#/archive_overview) the Poseidon ecosystem features a curated set of publication-wise packages with ancient and modern genotype data.
 
-We can get an overview over all publication-wise packages available there with `trident`:
+We can get an overview over all publication-wise packages available there with `trident`'s [`list`](https://www.poseidon-adna.org/#/trident?id=list-command) subcommand:
 
 ```{bash}
 ./trident list --remote --packages
 ```
 
-Or in a more interactive way with the [archive explorer](https://www.poseidon-adna.org/#/archive_explorer) on the poseidon website.
+::: {.callout-note}
+A more interactive way to get an overview is the [archive explorer](https://www.poseidon-adna.org/#/archive_explorer) on the Poseidon website.
+:::
 
-As our sample of interest was found in Western Eurasia a first valuable point of reference is genotype data from various modern populations from there.
+As our sample of interest was found in Western Eurasia a first valuable point of reference is genotype data from various modern populations from there. The following list includes a number of relevant populations. It can be downloaded [here](https://raw.githubusercontent.com/nevrome/mobest.analysis.2022/master/code/01_data_preparation/modern_western_eurasian_populations.txt).
 
 :::{.scrolling}
 
@@ -106,11 +108,9 @@ Turkish
 Ukrainian
 ```
 
-The list can be downloaded [here](https://raw.githubusercontent.com/nevrome/mobest.analysis.2022/master/code/01_data_preparation/modern_western_eurasian_populations.txt).
-
 :::
 
-`trident` allows to download packages that contain samples with this group attribution from the community archive.
+`trident` includes the [`fetch`](https://www.poseidon-adna.org/#/trident?id=fetch-command) subcommand, which allows to download packages that contain samples with this group attribution from the community archive.
 
 ```{bash}
 trident fetch -d refData --fetchFile modern_western_eurasian_populations.txt
@@ -125,13 +125,13 @@ refData
 └── 2019_Jeong_InnerEurasia-3.0.1
 ```
 
-This works, because the population list above already has the same structure as the selection language trident uses for `fetch` and `forge` (more about that below).
+This works, because the population list above already has the same structure as the selection language trident uses for `fetch` and `forge`.
 
 ## Merging the reference data with our data
 
 We now have our own Poseidon package for the ice mummy in a directory `ice` and various packages with modern reference data in `refData`. Our package features genotype data in EIGENSTRAT format, the reference data packages include data in PLINKs binary format.
 
-`trident`s most notable feature is the ability to merge the exact samples we require from both data sources at once with the [`forge` subcommand](https://www.poseidon-adna.org/#/trident?id=forge-command).
+`trident`s most notable feature is the ability to merge the exact samples we require from both data sources at once with the [`forge`](https://www.poseidon-adna.org/#/trident?id=forge-command) subcommand.
 
 ```{bash}
 trident forge \
@@ -146,11 +146,17 @@ trident forge \
 
 Note how we list two directories as data sources with `-d`/`--baseDir`. `forge` discovers and reads all Poseidon packages both in `refData` and `ice`.
 
-It then constructs a subset- and merge operation, by parsing the selection language from both the `--forgeFile` `modern_western_eurasian_populations.txt` and the individual forge string `-f` `"<ice>"`. The forge language is a powerful DSL (domain specific language) that allows positive and negative selection of individuals (in `<...>`), populations and Poseidon packages (in `*...*`).
+It then constructs a subset- and merge operation, by parsing the selection language from both the `--forgeFile` `modern_western_eurasian_populations.txt` and the individual forge string `-f` `"<ice>"`. 
+
+::: {.callout-note}
+The `forge` language is a powerful DSL (domain specific language) that allows positive and negative selection of individuals (in `<...>`), populations and Poseidon packages (in `*...*`). It's documented  [here](https://www.poseidon-adna.org/#/trident?id=the-forge-selection-language).
+:::
 
 `forge` reads both data in EIGENSTRAT and in PLINK's binary format in constant memory via stream-processing. It can also produce both formats for the output package, though the default is the more space efficient PLINK format, so we have to set `--outFormat EIGENSTRAT` here for our downstream applications.
 
-The `--intersect` flag is a reaction to the fact that our input packages feature different SNP sets: Some include only the ~600.000k HumanOrigins SNPs, others the ~1.240.000k 1240K SNPs. As a default `forge` returns the union of all SNP sets it encounters, which would here yield many missing entries for the modern reference data.
+The `--intersect` flag is a reaction to the fact that our input packages feature different SNP sets: Some include only the ~600.000 HumanOrigins SNPs, others the ~1.240.000 1240K SNPs. As a default `forge` returns the union of all SNP sets it encounters, which would here yield many missing entries for the modern reference data.
+
+When the forge process has completed we can inspect the result with the [`summarize`](https://www.poseidon-adna.org/#/trident?id=summarise-command) subcommand:
 
 ```{bash}
 trident summarize -d iceWithRef
@@ -158,11 +164,11 @@ trident summarize -d iceWithRef
 
 ## Reducing the data size
 
-Our `iceWithRef` package is ready for downstream analysis, but it is also a bit bulky with, for example, 314 Russian samples alone. We could probably reduce its size without loosing much statistical power for the PCA we want to run.
+Our `iceWithRef` package is ready for downstream analysis, but it is also a bit bulky. It includes, for example, 314 Russian samples alone. We could probably reduce its size without loosing much statistical power for the PCA we want to run below.
 
 One way of doing so would be, to limit the maximum number of samples per population. We can easily subset the package with `trident forge`, if we can obtain a list of samples we want to keep. But how do we get this list?
 
-The Poseidon framework includes the [`qjanno` software tool](https://www.poseidon-adna.org/#/qjanno) that allows to query arbitrary .janno and .txt files as SQLite database tables and thus enable advanced selection operations.
+The Poseidon framework includes the [`qjanno`](https://www.poseidon-adna.org/#/qjanno) software tool that allows to query arbitrary .janno and .txt files as SQLite database tables and thus enable advanced selection operations.
 
 We can install it just as `trident`:
 
@@ -189,11 +195,17 @@ ORDER BY n
 "
 ```
 
-If we forget the available columns in .janno files the `-c` option returns a list.
+::: {.callout-note}
+The `d()` pseudo-function in the `FROM ...` field of the query is one of three pseudo-functions to automatically search for .janno files to load them into `qjanno`. Read more about that [`here`](https://www.poseidon-adna.org/#/qjanno?id=the-janno-crawling-pseudo-functions).
+:::
+
+::: {.callout-note}
+If we forget the available columns in `.janno` files the `-c` option returns a list for us:
 
 ```{bash}
 qjanno "SELECT * FROM d(iceWithRef)" -c
 ```
+:::
 
 With this power we can construct a two-step query for random samples for each group. 
 
@@ -215,7 +227,7 @@ ORDER BY Group_Name DESC;
 " --raw --noOutHeader > ten_samples_max.txt
 ```
 
-`ten_samples_max.txt` has the structure of the selection language for `forge` and we can run it with it to derive a smaller analysis dataset.
+`ten_samples_max.txt` again has the structure of the `forge` selection language and we can run it with it to derive a smaller analysis dataset.
 
 ```{bash}
 trident forge \
@@ -223,17 +235,15 @@ trident forge \
   --forgeFile ten_samples_max.txt \
   --outFormat EIGENSTRAT \
   -o iceWithRefSmall
-```
 
-```{bash}
 trident summarize -d iceWithRefSmall
 ```
 
-## Perform a PCA analysis
+## Performing a PCA analysis
 
 After all these technicalities we can finally go back to the scientific question that motivated all of this: What is the genetic profile of the ice mummy Prof. P. had found in the Tyrolean Alps?
 
-Here we use the `smart_pca()` function from the [`smartsnp` R package](https://github.com/cran/smartsnp).
+Here we use the `smart_pca()` function from the [`smartsnp`](https://github.com/ChristianHuber/smartsnp) R package^[@HerrandoPrez2021].
 
 ```{r}
 # read the ind file
@@ -253,10 +263,14 @@ pca_out <- smartsnp::smart_pca(
 )
 ```
 
+We can save this intermediate result in the file system.
+
 ```{r}
-#saveRDS(pca_out, file = "scratch/pca_out2.rds")
-#pca_out <- readRDS("scratch/pca_out2.rds")
+saveRDS(pca_out, file = "scratch/pca_out.rds")
+#pca_out <- readRDS("scratch/pca_out.rds")
 ```
+
+And we can finally plot it like this:
 
 ```{r}
 library(magrittr)
@@ -274,8 +288,20 @@ p <- pca_out$pca.sample_coordinates %>%
 ```{r, echo=FALSE}
 ggsave(
   "img/pca1.png",
-  plot = p
+  plot = p,
+  width = 600, height = 400,
+  dpi = 150,
+  units = "px",
+  scale = 1.2
 )
 ```
 
 ![](img/pca1.png)
+***
+
+::: {.callout-tip}
+## Learn more about...
+- The Poseidon public archives: [Public Poseidon archives](https://www.poseidon-adna.org/#/archive_overview)
+- The `qjanno` software tool: [qjanno CLI software](https://www.poseidon-adna.org/#/qjanno)
+- The `smartsnp` R package for this data: [Vignette: Projecting ancient samples](https://christianhuber.github.io/smartsnp/articles/aDNA_smartpca_analysis.html)
+:::

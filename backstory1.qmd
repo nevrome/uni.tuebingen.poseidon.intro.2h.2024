@@ -45,6 +45,6 @@ rs950122	1	2.272e-2	846864	C	G
 ...
 ```
 
-They seem to feature the SNPs for a single individual. Few missing values, certainly enough to work with.
+They seem to feature the SNPs for a single individual. With few missing values, certainly enough to work with.
 
 You are justifiably concerned about the ethical implications of working with a sample you know so little about, but you put these concerns aside for the moment. You want to get to the bottom of this mystery first.

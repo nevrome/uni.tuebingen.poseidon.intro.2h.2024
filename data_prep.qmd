@@ -24,7 +24,7 @@ We then copy the data we received from Prof. P. there into a directory `iceGeno`
 
 ## Installing trident
 
-As we want to use Poseidon for this analysis, we have to install its main software tool: [`trident`](https://www.poseidon-adna.org/#/trident). On Linux we can simply install it on the command line. On Windows and macOS security features of the operating system complicate the installation.
+As we want to use Poseidon for this analysis, we have to install its main software tool: [`trident`](https://www.poseidon-adna.org/#/trident). On Linux we can simply install it on the command line.
 
 ```{bash}
 # download the current stable release binary
@@ -39,13 +39,19 @@ chmod +x trident
 
 With trident ready and running we can turn to the data.
 
+::: {.callout-caution}
+`trident` is also available for Windows and macOS, but security features of these operating systems complicate the installation.
+:::
+
 ## Turning the data into a Poseidon package
 
-At the moment we only have the EIGENSTRAT data. This is sufficient to work with `trident`, which supports direct handling of genotype data through the `-p`/`--genoOne` flag.
+At the moment we only have the Eigenstrat data. To incorporate context information, for example the coordinates we received from Prof. P., we will create a Poseidon package around it.
 
-But as we already know that we want to incorporate context information, for example the coordinates we received from Prof. P., we will create a Poseidon package for this data.
+::: {.callout-note}
+`trident` supports direct handling of genotype data without a Poseidon package with the `-p`/`--genoOne` flag.
+:::
 
-We can do so with `trident`'s `init` subcommand, which wraps genotype data into Poseidon packages.
+We can create the package with `trident`'s [`init`](https://www.poseidon-adna.org/#/trident?id=init-command) subcommand, which wraps genotype data in a Poseidon package.
 
 By running
 
@@ -55,6 +61,9 @@ By running
   -o ice
 ```
 
+:::: {.columns}
+
+::: {.column width="40%"}
 we turn
 
 ```
@@ -63,7 +72,9 @@ iceGeno
 ├── ice.ind
 └── ice.snp
 ```
+:::
 
+::: {.column width="60%"}
 into
 
 ```
@@ -75,6 +86,9 @@ ice
 ├── ice.snp
 └── POSEIDON.yml
 ```
+:::
+
+::::
 
 The `POSEIDON.yml` defines the package. `init` returns a technically valid template, which we can simplify for now.
 
@@ -98,7 +112,7 @@ jannoFile: ice.janno
 bibFile: ice.bib
 ```
 
-```{filename="POSEIDON.yml (modified)"}
+```{filename="POSEIDON.yml (simplified)"}
 poseidonVersion: 2.7.1
 title: ice
 packageVersion: 0.1.0
@@ -114,7 +128,7 @@ jannoFile: ice.janno
 
 We can delete the `.bib` file, as we have no literature references for our new sample yet.
 
-The generated `.janno` file features a lot of empty columns. We can delete them for the time being and only keep and fill the ones for which we have information: `Latitude` and `Longitude`.
+The generated `.janno` file features a lot of empty columns. We can delete them and only keep and fill the ones for which we have information: `Latitude` and `Longitude`.
 
 ::: {.table-responsive}
 
@@ -144,4 +158,14 @@ After all these manual changes we should confirm that the package is still struc
 
 If we did everything right, then the validation should pass. Otherwise we should go back to the package an fix it. `trident` only reads valid packages. If we encounter an issue we may get more information about it by running trident with the `--debug` flag.
 
+::: {.callout-note}
 `validate` supports not just the validation of whole packages, but also of individual files, e.g. `.janno`, `.geno` or `.bib` files. It can also ignore the genotype data with `--ignoreGeno`, or parse the whole genotype data files with `--fullGeno`. As a default it attempts to parse the first 100 SNPs.
+:::
+
+***
+
+::: {.callout-tip}
+## Learn more about...
+- The `trident` software tool: [trident CLI software](https://www.poseidon-adna.org/#/trident)
+- The structure of the Poseidon package: [The Poseidon package](https://www.poseidon-adna.org/#/standard)
+:::
