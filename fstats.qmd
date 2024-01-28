@@ -22,7 +22,7 @@ wget https://github.com/poseidon-framework/poseidon-analysis-hs/releases/latest/
 mv xerxes-Linux xerxes
 # make it executable
 chmod +x xerxes
-# run it to test if it is working
+<!-- # run it to test if it is working -->
 ./xerxes -h
 ```
 
@@ -33,19 +33,56 @@ chmod +x xerxes
 For the ice mummy we previously concluded from the PCA plot, that it seems to feature an ancestry profile not unlike the of what we can observe for present day Sardinians. We can confirm this with a number of F4-statistics...
 
 ```{bash}
-trident fetch -d ref_data -f "*Reference_Genomes*"
-trident fetch -d ref_data -f "*2016_LazaridisNature*"
+trident fetch -d refData -f "*Reference_Genomes*"
 
-xerxes fstats -d ref_data \
-  --stat 'F4(<Chimp.REF>,<Iceman.SG>,English,French)' \
-  --stat 'F4(<Chimp.REF>,<Iceman.SG>,Sardinian,French)'
+xerxes fstats -d refData -d ice \
+  --stat 'F4(<Chimp.REF>,<ice>,English,French)' \
+  --stat 'F4(<Chimp.REF>,<ice>,Sardinian,French)'
 ```
+
+```{bash}
+trident fetch -d refData -f "Austria_EN_LBK, Croatia_Mesolithic_HG, Russia_Samara_EBA_Yamnaya, Mbuti.DG"
+
+xerxes fstats -d refData -d ice \
+  --stat 'F3(<ice>,Austria_EN_LBK,Mbuti.DG)' \
+  --stat 'F3(<ice>,Croatia_Mesolithic_HG,Mbuti.DG)' \
+  --stat 'F3(<ice>,Russia_Samara_EBA_Yamnaya,Mbuti.DG)' \
+  -f outgroupF3.tsv
+```
+
+```{r}
+library(magrittr)
+library(ggplot2)
+
+outgroup_f3 <- readr::read_tsv("scratch/outgroupF3.tsv")
+p <- outgroup_f3 %>%
+  ggplot() +
+  geom_point(aes(x = b, y = Estimate_Jackknife)) +
+  geom_errorbar(
+    aes(
+      x = b,
+      ymin = Estimate_Jackknife - StdErr_Jackknife,
+      ymax = Estimate_Jackknife + StdErr_Jackknife
+    )
+  ) +
+  coord_flip() +
+  scale_x_discrete(limits = rev)
+```
+
+```{r, echo=FALSE}
+ggsave(
+  "img/outgroupf3.png",
+  plot = p
+)
+```
+
+![](img/outgroupf3.png)
 
 - stream processing
 
 [writeup](https://mpi-eva-archaeogenetics.github.io/comp_human_adna_book/fstats.html)
 
-```{file.name="f4.config"}
+```{yml, file.name="f4.config"}
 fstats:
 - type: F4
   a: ["<Chimp.REF>"]
@@ -57,4 +94,29 @@ fstats:
 ```{bash}
 xerxes fstats -d ref_data \
   --statConfig f4.config
+```
+
+```{yml, file.name="xerxes.config"}
+# You can define groups right within the configuration file.
+# here we use negative selection to remove individuals from the
+# newly defined groups
+groupDefs:
+  CEU2: ["CEU.SG", "-<NA12889.SG>", "-<NA12890.SG>"]
+  FIN2: ["FIN.SG", "-<HG00383.SG>", "-<HG00384.SG>"]
+  GBR2: ["GBR.SG", "-<HG01791.SG>", "-<HG02215.SG>"]
+  IBS2: ["IBS.SG", "-<HG02238.SG>", "-<HG02239.SG>"]
+fstats:
+- type: F2 # this will create 2x2 = 4 F2-Statistics
+  a: ["French", "Spanish"]
+  b: ["Han", "CEU2"]
+- type: F3vanilla # This will create 3x2x1 = 6 Statistics
+  a: ["French", "Spanish", "Mbuti"]
+  b: ["Han", "CEU2"]
+  c: ["<Chimp.REF>"]
+- type: F4 # This will create 5x5x4x1 = 100 Statistics
+  a: ["<I0156.SG>", "<I0157.SG>", "<I0159.SG>", "<I0160.SG>", "<I0161.SG>"]
+  b: ["<I0156.SG>", "<I0157.SG>", "<I0159.SG>", "<I0160.SG>", "<I0161.SG>"]
+  c: ["CEU2", "FIN2", "GBR2", "IBS2"]
+  d: ["<Chimp.REF>"]
+# Altogether: 110 statistics of different types
 ```
