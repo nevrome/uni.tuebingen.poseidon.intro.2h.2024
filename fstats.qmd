@@ -30,25 +30,74 @@ chmod +x xerxes
 
 ## Calculating F-statistics with xerxes
 
-For the ice mummy we previously concluded from the PCA plot, that it seems to feature an ancestry profile not unlike the of what we can observe for present day Sardinians. We can confirm this with a number of F4-statistics...
+For the ice mummy we previously concluded from the PCA plot, that it seems to feature an ancestry profile not unlike the of what we can observe for present day Sardinians. It plots far closer to them than for example to modern-day English reference genomes. 
+`xerxes` allows us to test this specific comparison with a test encoded as  `F4(<Chimp.REF>,<ice>,Sardinian,French)` vs. `F4(<Chimp.REF>,<ice>,English,French)`, so $\textrm{F4}(\textrm{Chimp},\textrm{Ice mummy};\textrm{Sardinian},\textrm{French})$ vs. $\textrm{F4}(\textrm{Chimp},\textrm{Ice mummy};\textrm{English},\textrm{French})$.
 
 ```{bash}
+# download the Reference_Genomes package for the Chimp genome
 trident fetch -d refData -f "*Reference_Genomes*"
-
+# run the two F4 tests
 xerxes fstats -d refData -d ice \
-  --stat 'F4(<Chimp.REF>,<ice>,English,French)' \
-  --stat 'F4(<Chimp.REF>,<ice>,Sardinian,French)'
+  --stat 'F4(<Chimp.REF>,<ice>,Sardinian,French)' \
+  --stat 'F4(<Chimp.REF>,<ice>,English,French)'
+```
+
+::: {.callout-note}
+`xerxes` uses stream-processing to read samples from different Poseidon packages simultaneously and with small memory footprint.
+:::
+
+This command line interface is suitable for a small set of targeted tests. For bigger test series where we want to explore large sets of permutations among the individuals and populations of interest `xerxes` features a powerful .yml based configuration file format.
+
+```{yml, file.name="f4.config"}
+fstats:
+- type: F4
+  a: ["<Chimp.REF>"]
+  b: ["<Iceman.SG>"]
+  c: ["English", "Sardinian"]
+  d: ["French"]
 ```
 
 ```{bash}
-trident fetch -d refData -f "Austria_EN_LBK, Croatia_Mesolithic_HG, Russia_Samara_EBA_Yamnaya, Mbuti.DG"
+xerxes fstats -d ref_data \
+  --statConfig f4.config
+```
 
+::: {.callout-note}
+This config file format allows to define groups dynamically with a simple selection syntax. This includes both positive and negative selection
+
+```{yml, file.name="f4.config"}
+groupDefs:
+  FR: ["French", "French.SDG", "-<French23812>", "-<French23830>"]
+  EN: ["English", "-<HG00131>"]
+fstats:
+- type: F4
+  a: ["<Chimp.REF>"]
+  b: ["<Iceman.SG>"]
+  c: ["EN", "Sardinian"]
+  d: ["FR"]
+```
+
+It also allow to list multiple different statistics in the `fstats` blog, which will then all be calculated in one `xerxes` run.
+:::
+
+The F4 test shown here is not particular interesting though - we typically want to dive much deeper and beyond modern reference genomes. One relevant question for for an ancient sample from Western Eurasia may be, to which major ancestry components it has the strongest affinities: *Western Hunter-Gatherer* ancestry, *Ancient Near-Eastern* ancestry or Steppe ancestry.
+
+Each of these components is represented by multiple ancient reference genomes, each in turn grouped into *populations* by their shared origin in space, time and by the archaeological material they are associated with. Here we run one possible outgroup-F3 test with three individual reference populations^[This test is inspired by https://doi.org/10.1016/j.xgen.2023.100377, Figure S1].
+
+```{bash}
+# download the various packages that include samples for the desired
+# reference genomes
+trident fetch -d refData \ 
+  -f "Austria_EN_LBK, Croatia_Mesolithic_HG, Russia_Samara_EBA_Yamnaya, Mbuti.DG"
+# run three F3 tests
 xerxes fstats -d refData -d ice \
   --stat 'F3(<ice>,Austria_EN_LBK,Mbuti.DG)' \
   --stat 'F3(<ice>,Croatia_Mesolithic_HG,Mbuti.DG)' \
   --stat 'F3(<ice>,Russia_Samara_EBA_Yamnaya,Mbuti.DG)' \
   -f outgroupF3.tsv
 ```
+
+Here we wrote the results to an output file, which we can read into R to visualize the relevant estimates.
 
 ```{r}
 library(magrittr)
@@ -78,45 +127,9 @@ ggsave(
 
 ![](img/outgroupf3.png)
 
-- stream processing
+::: {.callout-tip}
+## Learn more
+Stephan Schiffels, the main author of `xerxes`, recently introduced F-statistics and his tool [here](https://mpi-eva-archaeogenetics.github.io/comp_human_adna_book/fstats.html).
+:::
 
-[writeup](https://mpi-eva-archaeogenetics.github.io/comp_human_adna_book/fstats.html)
 
-```{yml, file.name="f4.config"}
-fstats:
-- type: F4
-  a: ["<Chimp.REF>"]
-  b: ["<Iceman.SG>"]
-  c: ["English", "Sardinian"]
-  d: ["French"]
-```
-
-```{bash}
-xerxes fstats -d ref_data \
-  --statConfig f4.config
-```
-
-```{yml, file.name="xerxes.config"}
-# You can define groups right within the configuration file.
-# here we use negative selection to remove individuals from the
-# newly defined groups
-groupDefs:
-  CEU2: ["CEU.SG", "-<NA12889.SG>", "-<NA12890.SG>"]
-  FIN2: ["FIN.SG", "-<HG00383.SG>", "-<HG00384.SG>"]
-  GBR2: ["GBR.SG", "-<HG01791.SG>", "-<HG02215.SG>"]
-  IBS2: ["IBS.SG", "-<HG02238.SG>", "-<HG02239.SG>"]
-fstats:
-- type: F2 # this will create 2x2 = 4 F2-Statistics
-  a: ["French", "Spanish"]
-  b: ["Han", "CEU2"]
-- type: F3vanilla # This will create 3x2x1 = 6 Statistics
-  a: ["French", "Spanish", "Mbuti"]
-  b: ["Han", "CEU2"]
-  c: ["<Chimp.REF>"]
-- type: F4 # This will create 5x5x4x1 = 100 Statistics
-  a: ["<I0156.SG>", "<I0157.SG>", "<I0159.SG>", "<I0160.SG>", "<I0161.SG>"]
-  b: ["<I0156.SG>", "<I0157.SG>", "<I0159.SG>", "<I0160.SG>", "<I0161.SG>"]
-  c: ["CEU2", "FIN2", "GBR2", "IBS2"]
-  d: ["<Chimp.REF>"]
-# Altogether: 110 statistics of different types
-```
