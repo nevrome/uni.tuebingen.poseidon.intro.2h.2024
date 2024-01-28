@@ -8,27 +8,29 @@ engine: knitr
 shift-heading-level-by: 1
 ---
 
-# Working with .janno context information in R
+# Working with `.janno` context information in R
 
 For data analysis and visualization an R-based workflow may be helpful. This is especially relevant if we want to incorporate spatial and temporal information.
 
-## Loading an .janno file into R
+## Loading a `.janno` file into R
 
 We previously prepared the PCA dataset and we can load it again into an R environment.
 
 ```{r}
-pca_out <- readRDS("scratch/pca_out2.rds")
+pca_out <- readRDS("scratch/pca_out.rds")
 ```
 
-This result dataset lacks all context information for the individual samples, which renders it really difficult to make sense of the PCA plot without prior knowledge. We do have plenty of context information, though, in the .janno file of the `iceWithRefSmall` package we prepared for the PCA in the first place. How do we access this?
+This result dataset lacks all context information for the individual samples, which renders it really difficult to make sense of the PCA plot without prior knowledge. We do have plenty of context information, though, in the `.janno` file of the `iceWithRefSmall` package we prepared for the PCA in the first place. How do we access this?
 
-As the .janno file is a simple .tsv file, we can easily read it into R, for example with `readr::read_tsv()` into a generic `tibble`. The Poseidon ecosystem includes an R package `janno` to read .janno files into a more specific `janno` data structure with some additional features.
+As the `.janno` file is a simple `.tsv` file, we can easily read it into R, for example with `readr::read_tsv()` into a generic `tibble`. Beyond that the Poseidon ecosystem includes an R package [`janno`](https://www.poseidon-adna.org/#/janno_r_package) to read `.janno` files into a more specific `janno` data structure with some additional features.
 
 ```{r}
 ref_janno <- janno::read_janno("scratch/iceWithRefSmall")
 ```
 
-`janno::read_janno()` also applies a structural validity check to the input, transforms the columns to the correct data type for specified .janno columns and correctly detects list columns. At the same time the `janno` S3 class is derived from tibble and thus fully interoperable with the tidyverse.
+::: {.callout-note}
+`janno::read_janno()` applies a structural validity check to the input, transforms the columns to the correct data type for specified `.janno` columns and correctly detects list columns. At the same time the `janno` S3 class is derived from tibble and thus fully interoperable with the tidyverse.
+:::
 
 With this information ready we can easily enrich our PCA plot to make it more readable.
 
@@ -46,7 +48,7 @@ library(ggplot2)
 p <- pca_with_context %>%
   dplyr::mutate(group = dplyr::case_match(
     group,
-    c("iceG", "French", "Syrian", "Sardinian") ~ group,
+    c("iceG", "English", "Syrian", "Sardinian") ~ group,
     .default = NA
   )) %>%
   dplyr::arrange(!is.na(group), group) %>%
@@ -55,22 +57,25 @@ p <- pca_with_context %>%
     aes(x = PC1, y = PC2, colour = group)
   ) +
   scale_y_reverse() +
-  coord_fixed() +
-  theme(legend.position = "bottom")
+  coord_fixed()
 ```
 
 ```{r, echo=FALSE}
 ggsave(
   "img/pca2.png",
-  plot = p
+  plot = p,
+  width = 600, height = 400,
+  dpi = 150,
+  units = "px",
+  scale = 1.2
 )
 ```
 
 ![](img/pca2.png)
 
-## Adding new information to the .janno file
+## Adding new information to a `.janno` file
 
-Now what about our own sample? As a first step we add the new information we received from Prof. P. to our Poseidon package `ice`. We do so by editing the .janno file at `ice/ice.janno`.
+Now what about our own sample? As a first step we add the new information we received from Prof. P. to our Poseidon package `ice`. We do so by editing the `.janno` file at `ice/ice.janno`.
 
 Starting from
 
@@ -82,23 +87,27 @@ Starting from
 
 :::
 
-we add three additional columns as defined in the documentation here.
+we add some additional columns for the age information.
 
 ::: {.table-responsive}
 
-|Date_Type  |Date_C14_Uncal_BP|Date_C14_Uncal_BP_Err|
-|-----------|-----------------|---------------------|
-|C14        |4555             |34                   |
+|Date_Type  |Date_C14_Uncal_BP|Date_C14_Uncal_BP_Err|Date_BC_AD_Start|Date_BC_AD_Stop|
+|-----------|-----------------|---------------------|----------------|---------------|
+|C14        |4555             |34                   |n/a             |n/a            |
 
 :::
 
-As we want to work particularly neatly we document this change to the package in a changelog, which we add to the package in the form of a `CHANGELOG.md` file.
+::: {.callout-note}
+All "official", pre-defined `.janno` file columns are specified as part of the package schema [here](https://github.com/poseidon-framework/poseidon-schema/blob/master/janno_columns.tsv). Beyond that the Poseidon websites features more detailed and concrete explanations of the columns [here](https://www.poseidon-adna.org/#/janno_details), for example for all columns related to sample age and dating: [Temporal position](https://www.poseidon-adna.org/#/janno_details?id=temporal-position).
+:::
+
+Optionally we can document this change to the package in a changelog, which we add to the package in the form of a `CHANGELOG.md` file.
 
 ```{filename="CHANGELOG.md"}
 - V 0.2.0: Added a radiocarbon date for the ice sample.
 ```
 
-We also update the package version number in our `POSEIDON.yml` file and link the changelog file there:
+We should then also update the package version number in our `POSEIDON.yml` file and link the changelog there:
 
 ```{filename="POSEIDON.yml"}
 poseidonVersion: 2.7.1
@@ -115,9 +124,9 @@ After implementing the change we should again check the structural validity of t
 trident validate -d ice
 ```
 
-## Spatial and temporal data in .janno files
+## Spatial and temporal data in `.janno` files
 
-With the data in, we can load the .janno file for our sample.
+With the data added, we can load the `.janno` file for our sample into R.
 
 ```{r}
 ice_janno <- janno::read_janno("scratch/ice")
@@ -129,38 +138,46 @@ As the `janno` class is derived from `tibble` we can easily transform it to a sp
 ice_sf <- ice_janno %>%
   sf::st_as_sf(coords = c("Longitude", "Latitude"), crs = 4326)
 
-hu <- rnaturalearth::ne_coastline()
+worldwide_coastline <- rnaturalearth::ne_coastline()
 
 p <- ggplot() +
-  geom_sf(data = hu) +
+  geom_sf(data = worldwide_coastline) +
   geom_sf(data = ice_sf, color = "red") +
-  coord_sf(xlim = c(-5,25), ylim = c(35, 60))
+  coord_sf(xlim = c(-15,40), ylim = c(35, 60))
 ```
 
 ```{r, echo=FALSE}
 ggsave(
   "img/map.png",
-  plot = p
+  plot = p,
+  width = 600, height = 400,
+  dpi = 150,
+  units = "px",
+  scale = 1.2
 )
 ```
 
 ![](img/map.png)
 
-For temporal information, the `janno::process_age()` function can handle all age data that can be specified for an individual sample in a Poseidon package. For C14 date calibration it runs (sum)calibration through the [`Bchron` R package](https://github.com/andrewcparnell/Bchron/) to generate a post-calibration probability distribution, which in turn can be used for derived measures.
+For temporal information, the `janno` package includes a special convenience function: `janno::process_age()`. It can handle all kind of age data that can be specified for an individual sample in a Poseidon package.
 
-`process_age()` thus appends up to five additional list columns to the `janno` file:
+For C14 date calibration it runs (sum)calibration through the [`Bchron`](https://github.com/andrewcparnell/Bchron/) R package^[@Bchron2008] to generate a post-calibration probability distribution, which in turn can be used for derived measures.
+
+`process_age()` thus appends up to five additional (list) columns to the `janno` file:
 
 ```{r}
-ice_janno$Date_BC_AD_Start <-NA
-ice_janno$Date_BC_AD_Stop <-NA
 ice_age <- ice_janno %>% janno::process_age()
+```
 
+The `Date_BC_AD_*_Derived` columns simply include probable start, end and median ages:
+
+```{r}
 ice_age$Date_BC_AD_Start_Derived
 ice_age$Date_BC_AD_Median_Derived
 ice_age$Date_BC_AD_Stop_Derived
 ```
 
-We can plot the distribution just as Oxcal would do it for us.
+`ice_age$Date_BC_AD_Prob` includes the full (post-calibration) year-wise probability distribution for a given sample. We can plot the distribution just as for example [OxCal](https://c14.arch.ox.ac.uk/oxcal.html) would do it for us.
 
 ```{r}
 prob <- ice_age$Date_BC_AD_Prob[[1]]
@@ -176,16 +193,21 @@ p <- ggplot() +
       dplyr::filter(two_sigma),
     mapping = aes(x = age, y = "sample 1", group = ts),
     position = position_nudge(y = -0.1)
-  )
+  ) +
+  theme(axis.title.y = element_blank())
 ```
 
 ```{r, echo=FALSE}
 ggsave(
   "img/c14ridge.png",
-  plot = p
+  plot = p,
+  width = 600, height = 400,
+  dpi = 150,
+  units = "px",
+  scale = 1.2
 )
 ```
 
 ![](img/c14ridge.png)
 
-Though the ages sampled from the distribution in `ice_age$Date_BC_AD_Sample` may be more important for derived applications.
+Though the ages sampled from the distribution in `ice_age$Date_BC_AD_Sample` may be even more important for derived applications.
