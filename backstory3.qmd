@@ -21,7 +21,7 @@ In this glorious moment you see another email from Prof. P.:
 > Best,
 > CP
 
-![](img/the_celebration.jpeg){width=60% fig-align="center"}
+![](img/the_celebration2.jpeg){width=60% fig-align="center"}
 
 As evident from another photograph^[Prompt : "A film still of a happy german mountaineer with a green jacket in a mountain landscape. The mountaineer holds a manuscript. The yeti is with him." Made with Microsoft Bing Image Creator.], Prof. P. is already celebrating.
 
