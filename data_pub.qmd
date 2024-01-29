@@ -9,28 +9,32 @@ shift-heading-level-by: 1
 
 # Submitting a package to the Poseidon community archive
 
-So far we have used data in the public Poseidon community archive, now it's time to learn how to give back. Poseidon is very dependent on data and time donations from the community.
+So far we have used data in the public Poseidon community archive, now it's time to learn how to give back. Poseidon is very dependent on data and time donations from its community.
 
 ## Building the work environment
 
 In a first step we have to make ourselves familiar with a a number of core technologies.
 
--   Creating and validating Poseidon packages with the `trident` tool.
--   Free and open source distributed version control with [Git](https://git-scm.com).
--   Collaborative working on Git projects with [GitHub](https://github.com).
--   Handling large files in Git using [Git LFS](https://git-lfs.com).
+-   [x] Creating and validating Poseidon packages with the `trident` tool.
+-   [ ] Free and open source distributed version control with [Git](https://git-scm.com).
+-   [ ] Collaborative working on Git projects with [GitHub](https://github.com).
+-   [ ] Handling large files in Git using [Git LFS](https://git-lfs.com).
 
 We have to install all of these software tools and set them up correctly. This is less daunting than it sounds, because: Superficial knowledge is sufficient and knowing them is useful far beyond this particular task.
 
 ## Preparing our Poseidon package for submission
 
-We already built a minimal Poseidon package for our data in previous sections. We even made modifications to the `.janno` file to include more context data. 
+We already built a minimal Poseidon package `ice` for our data in previous sections. We even made modifications to its `.janno` file to include more context data. 
 
-Before we submit the package we should check more information to `POSEIDON.yml`, `.janno` and `.bib` to include the meta information we consider relevant. All of these files are well specified and documented.
+Before we submit the package we should complete the information in `POSEIDON.yml`, `.janno`, `.bib` (and maybe `.ssf`), so include all meta data we consider relevant.
+
+::: {.callout-note}
+All of these files are well specified and documented. The [Poseidon package standard](https://www.poseidon-adna.org/#/standard) defines their general structure and various sub-pages on the website explain the individual variables in more detail: [Genotype data details](https://www.poseidon-adna.org/#/genotype_data), [`.janno` file details](https://www.poseidon-adna.org/#/janno_details), [`.ssf` file details](https://www.poseidon-adna.org/#/ssf_details)
+:::
 
 Here is the current state of our `POSEIDON.yml` file:
 
-```{yml, filename="POSEIDON.yml"}
+```{yml, filename="POSEIDON.yml (ice package)"}
 poseidonVersion: 2.7.1
 title: ice
 packageVersion: 0.2.0
@@ -45,9 +49,9 @@ jannoFile: ice.janno
 changelogFile: CHANGELOG.md
 ```
 
-And here is a `POSEIDON.yml` file from a recently submitted, real world package:
+And here is a `POSEIDON.yml` file from a recently submitted, real world package for @Peltola2023:
 
-```{yml, filename="POSEIDON.yml"}
+```{yml, filename="POSEIDON.yml (2023_Peltola_VolgaOka package)"}
 poseidonVersion: 2.7.1
 title: 2023_Peltola_VolgaOka
 description: Genetic admixture and language shift in the medieval Volga-Oka interfluve
@@ -72,41 +76,43 @@ bibFileChkSum: 2262b38bb4e5d8bfff2353fdbcb5bd20
 ```
 
 ::: {.callout-note}
-Some tasks in the package booking process for these files can be automated with [`trident rectify`](https://www.poseidon-adna.org/#/trident?id=rectify-command).
+Some tasks in the package preparation process for these files can be automated with [`trident rectify`](https://www.poseidon-adna.org/#/trident?id=rectify-command), for example adding the checksums for each package file.
 :::
 
 When we applied all necessary modifications we can confirm that the package is still valid with `trident validate -d ice`.
 
 ## Submitting the package
 
-To submit the package we have to create a fork of the [community archive repository on GitHub](https://github.com/poseidon-framework/community-archive). This requires a GitHub account.
+To submit the final package version we have to create a fork of the [community archive repository on GitHub](https://github.com/poseidon-framework/community-archive). This requires a GitHub account.
 
 ![Press the fork button in the top right corner to fork a repository on GitHub](img/fork.png)
 
 And then clone the fork to our computer, while omitting the large genotype data files. Note that this requires several setup steps to work correctly:
 
-    -   Git has be installed for your computer (see [here](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git))
-    -   You must have created an ssh key pair to connect to GitHub via ssh (see [here](https://docs.github.com/en/authentication/connecting-to-github-with-ssh))
-    -   Git LFS has to be installed (see [here](https://git-lfs.com)) and and configured for your user with `git lfs install`
+-   Git has be installed for your computer (see [here](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git))
+-   You must have created an ssh key pair to connect to GitHub via ssh (see [here](https://docs.github.com/en/authentication/connecting-to-github-with-ssh))
+-   Git LFS has to be installed (see [here](https://git-lfs.com)) and and configured for your user with `git lfs install`
 
-    ``` bash
-    GIT_LFS_SKIP_SMUDGE=1 git clone git@github.com:<yourGitHubUserName>/community-archive.git
-    ```
+``` bash
+GIT_LFS_SKIP_SMUDGE=1 git clone git@github.com:<yourGitHubUserName>/community-archive.git
+```
 
 With the cloned repository on our system we can copy the files into the repositories directory and commit the changes.
 
-    ``` {.bash filename="in the community-archive directory"}
-    cp -r ../myPackage myPackage
-    git add myPackage
-    git commit -m "added a first draft of myPackage"
-    git push
-    ```
+``` {bash, filename="in the community-archive directory"}
+cp -r ../ice ice
+git add ice
+git commit -m "added a first draft of the ice package"
+git push
+```
 
 In a last step we can open a Pull Request on GitHub from our fork to the original archive repository. Poseidon core members will take it from here.
 
 ![When you pushed to your fork, GitHub will automatically offer to "contribute" to the source repository](img/pull_request.png)
 
 ::: {.callout-tip}
-## Learn more
-The process is documented in more detail in a [**Submission guide**](https://www.poseidon-adna.org/#/archive_submission_guide) on the website.
+## Learn more about...
+- The submission process for the community archive: [Submission guide](https://www.poseidon-adna.org/#/archive_submission_guide)
 :::
+
+
