@@ -37,7 +37,7 @@ chmod +x trident
 ./trident -h
 ```
 
-With trident ready and running we can turn to the data.
+With `trident` ready and running we can turn to the data.
 
 ::: {.callout-caution}
 `trident` is also available for Windows and macOS, but security features of these operating systems complicate the installation.

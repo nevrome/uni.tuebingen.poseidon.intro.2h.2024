@@ -134,7 +134,8 @@ ggsave(
 
 ::: {.callout-tip}
 ## Learn more about...
-- F-statistics and how to use xerxes: [Introduction to F3- and F4-Statistics](https://mpi-eva-archaeogenetics.github.io/comp_human_adna_book/fstats.html)
+- The `trident fetch` -> `xerxes fstats` workflow: [Xerxes’s cutlery - enjoying your dinner?](https://blog.poseidon-adna.org/posts/xerxes_10.html)
+- F-statistics and how to use `xerxes`: [Introduction to F3- and F4-Statistics](https://mpi-eva-archaeogenetics.github.io/comp_human_adna_book/fstats.html)
 - `xerxes`' algorithms and implementation details: [xerxes Whitepaper](https://github.com/poseidon-framework/poseidon-analysis-hs/blob/main/docs/xerxes_whitepaper.pdf)
 :::
 

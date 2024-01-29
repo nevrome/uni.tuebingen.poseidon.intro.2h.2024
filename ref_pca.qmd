@@ -18,7 +18,7 @@ In its public [community-archive](https://www.poseidon-adna.org/#/archive_overvi
 We can get an overview over all publication-wise packages available there with `trident`'s [`list`](https://www.poseidon-adna.org/#/trident?id=list-command) subcommand:
 
 ```{bash}
-./trident list --remote --packages
+trident list --remote --packages
 ```
 
 ::: {.callout-note}
@@ -309,6 +309,7 @@ ggsave(
 ::: {.callout-tip}
 ## Learn more about...
 - The Poseidon public archives: [Public Poseidon archives](https://www.poseidon-adna.org/#/archive_overview)
+- The `forge` selection language: [Trident’s restaurant - your order please?](https://blog.poseidon-adna.org/posts/trident_14.html)
 - The `qjanno` software tool: [qjanno CLI software](https://www.poseidon-adna.org/#/qjanno)
 - The `smartsnp` R package for this data: [Vignette: Projecting ancient samples](https://christianhuber.github.io/smartsnp/articles/aDNA_smartpca_analysis.html)
 :::
