@@ -1,5 +1,6 @@
 # rendered page (for now)
 #_site
+#docs
 
 # scratch space for experimental data analysis
 scratch/
@@ -45,9 +46,6 @@ vignettes/*.pdf
 
 # R Environment Variables
 .Renviron
-
-# pkgdown site
-docs/
 
 # translation temp files
 po/*~

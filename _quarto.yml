@@ -1,5 +1,9 @@
 project:
   type: website
+  output-dir: docs
+  render:
+    - "*.qmd"
+    - "!scratch/"
 
 website:
   title: "Poseidon introduction for Tübingen University, February 2024"
