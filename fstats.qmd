@@ -130,7 +130,7 @@ ggsave(
 )
 ```
 
-![](img/outgroupf3.png)
+![F-stats plot; estimated values and errors for each test population on the y-axis](img/outgroupf3.png)
 
 ::: {.callout-tip}
 ## Learn more about...

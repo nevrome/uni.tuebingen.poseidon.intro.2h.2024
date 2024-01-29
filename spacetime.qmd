@@ -71,7 +71,7 @@ ggsave(
 )
 ```
 
-![](img/pca2.png)
+![PCA plot; the populations English, Sardinian, Syrian and iceG for the ice mummy are highlighted](img/pca2.png)
 
 ## Adding new information to a `.janno` file
 
@@ -157,7 +157,7 @@ ggsave(
 )
 ```
 
-![](img/map.png)
+![Map of Western Eurasia; the ice mummy sampling location is marked with a red dot](img/map.png)
 
 For temporal information, the `janno` package includes a special convenience function: `janno::process_age()`. It can handle all kind of age data that can be specified for an individual sample in a Poseidon package.
 
@@ -208,7 +208,7 @@ ggsave(
 )
 ```
 
-![](img/c14ridge.png)
+![Ridge plot of the post-calibration probability distribution of the radiocarbon age; the 2-sigma sections are marked with a line plot below the curve](img/c14ridge.png)
 
 Though the ages sampled from the distribution in `ice_age$Date_BC_AD_Sample` may be even more important for derived applications.
 

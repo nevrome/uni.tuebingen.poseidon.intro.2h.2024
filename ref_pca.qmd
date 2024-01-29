@@ -302,7 +302,8 @@ ggsave(
 )
 ```
 
-![](img/pca1.png)
+![PCA plot; the modern reference samples are marked in red and the projected ice mummy sample in blue](img/pca1.png)
+
 ***
 
 ::: {.callout-tip}
