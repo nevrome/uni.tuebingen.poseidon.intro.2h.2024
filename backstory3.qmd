@@ -23,6 +23,6 @@ In this glorious moment you see another email from Prof. P.:
 
 ![](img/the_celebration2.jpeg){width=60% fig-align="center"}
 
-As evident from another photograph^[Prompt : "A film still of a happy german mountaineer with a green jacket in a mountain landscape. The mountaineer holds a manuscript. The yeti is with him." Made with Microsoft Bing Image Creator.], Prof. P. is already celebrating.
+As evident from another photograph^[Prompt : "A film still of yetis and mountain climbers celebrating a scientific paper in a mountain setting. The atmosphere is bright and cheerful." Made with Microsoft Bing Image Creator.], Prof. P. is already celebrating.
 
 Well - one last step to complete this project! Fortunately the package is almost publication-ready, after you worked with it extensively for the last months. But how does this submission work?
