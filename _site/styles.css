@@ -1,0 +1,6 @@
+/* css styles */
+
+.scrolling {
+  max-height: 300px;
+  overflow-y: auto;
+}
