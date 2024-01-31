@@ -4,7 +4,8 @@
 
 # scratch space for experimental data analysis
 scratch/
-
+iceGeno/
+secretData/
 
 # History files
 .Rhistory

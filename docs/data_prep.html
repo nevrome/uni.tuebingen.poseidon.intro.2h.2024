@@ -228,7 +228,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> scratch</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> scratch</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>We then copy the data we received from Prof.&nbsp;P. there into a directory <code>iceGeno</code>.</p>
+<p>We then copy the data we received from Prof.&nbsp;P. into a directory <code>scratch/iceGeno</code>.</p>
 </section>
 <section id="installing-trident" class="level3">
 <h3 class="anchored" data-anchor-id="installing-trident">Installing trident</h3>
@@ -244,23 +244,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="ex">./trident</span> <span class="at">-h</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>With <code>trident</code> ready and running we can turn to the data.</p>
-<div class="callout callout-style-default callout-caution callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Caution
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p><code>trident</code> is also available for Windows and macOS, but security features of these operating systems complicate the installation.</p>
-</div>
-</div>
-</section>
-<section id="turning-the-data-into-a-poseidon-package" class="level3">
-<h3 class="anchored" data-anchor-id="turning-the-data-into-a-poseidon-package">Turning the data into a Poseidon package</h3>
-<p>At the moment we only have the Eigenstrat data. To incorporate context information, for example the coordinates we received from Prof.&nbsp;P., we will create a Poseidon package around it.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -271,10 +254,27 @@ Note
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p><code>trident</code> supports direct handling of genotype data without a Poseidon package with the <code>-p</code>/<code>--genoOne</code> flag.</p>
+<p><code>trident</code> is also available for Windows and macOS, but security features of these operating systems complicate the installation. If you trust trident then you can turn these protections off and run the executable just as on Linux.</p>
 </div>
 </div>
-<p>We can create the package with <code>trident</code>’s <a href="https://www.poseidon-adna.org/#/trident?id=init-command"><code>init</code></a> subcommand, which wraps genotype data in a Poseidon package.</p>
+</section>
+<section id="turning-the-data-into-a-poseidon-package" class="level3">
+<h3 class="anchored" data-anchor-id="turning-the-data-into-a-poseidon-package">Turning the data into a Poseidon package</h3>
+<p>At the moment we only have the Eigenstrat data as provided by Prof.&nbsp;P.. To incorporate context information, for example the coordinates we received from him, we can create a Poseidon package around it.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>This step is not absolutely necessary to use <code>trident</code>. <code>trident</code> supports direct handling of genotype data without a Poseidon package with the <code>-p</code>/<code>--genoOne</code> flag for unpackaged in- and the <code>--onlyGeno</code> flag for unpackaged output. You can still profit from <code>trident</code>’s convenient subsetting and merging abilities, even if you do not want to use any other Poseidon features.</p>
+</div>
+</div>
+<p>We create the package with <code>trident</code>’s <a href="https://www.poseidon-adna.org/#/trident?id=init-command"><code>init</code></a> subcommand, which wraps genotype data in a Poseidon package.</p>
 <p>By running</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">./trident</span> init <span class="dt">\</span></span>
@@ -518,7 +518,7 @@ jannoFile: ice.janno</code></pre>
 <section id="validating-our-poseidon-package" class="level3">
 <h3 class="anchored" data-anchor-id="validating-our-poseidon-package">Validating our Poseidon package</h3>
 <p>After all these manual changes we should confirm that the package is still structurally valid and computer-readable.</p>
-<p><code>trident</code> has a special subcommand for that: <code>validate</code>.</p>
+<p><code>trident</code> has a special subcommand for that: <a href="https://www.poseidon-adna.org/#/trident?id=validate-command"><code>validate</code></a>.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">./trident</span> validate <span class="at">-d</span> ice</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -533,7 +533,7 @@ Note
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p><code>validate</code> supports not just the validation of whole packages, but also of individual files, e.g.&nbsp;<code>.janno</code>, <code>.geno</code> or <code>.bib</code> files. It can also ignore the genotype data with <code>--ignoreGeno</code>, or parse the whole genotype data files with <code>--fullGeno</code>. As a default it attempts to parse the first 100 SNPs.</p>
+<p><code>validate</code> supports not just the validation of whole packages, but also of individual <code>.janno</code>, <code>.geno</code> or <code>.bib</code> files. It can also ignore the genotype data in a package with <code>--ignoreGeno</code>, or parse the whole genotype data files with <code>--fullGeno</code>. As a default it attempts to parse the first 100 SNPs.</p>
 </div>
 </div>
 <hr>
@@ -548,8 +548,8 @@ Learn more about…
 </div>
 <div class="callout-body-container callout-body">
 <ul>
-<li>The <code>trident</code> software tool: <a href="https://www.poseidon-adna.org/#/trident">trident CLI software</a></li>
 <li>The structure of the Poseidon package: <a href="https://www.poseidon-adna.org/#/standard">The Poseidon package</a></li>
+<li>The <code>trident</code> software tool: <a href="https://www.poseidon-adna.org/#/trident">trident CLI software</a></li>
 </ul>
 </div>
 </div>
