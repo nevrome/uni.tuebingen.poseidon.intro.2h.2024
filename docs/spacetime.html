@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Poseidon introduction for Tübingen University, February 2024 - About</title>
+<title>Poseidon introduction for Tübingen University, February 2024 – spacetime</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -235,22 +235,7 @@ div.csl-indent {
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default">
-<div class="quarto-title">
-<h1 class="title">About</h1>
-</div>
 
-
-
-<div class="quarto-title-meta">
-
-    
-  
-    
-  </div>
-  
-
-</header>
 
 <section id="working-with-.janno-context-information-in-r" class="level2">
 <h2 class="anchored" data-anchor-id="working-with-.janno-context-information-in-r">Working with <code>.janno</code> context information in R</h2>
@@ -262,7 +247,8 @@ div.csl-indent {
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>pca_out <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">"scratch/pca_out.rds"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>This result dataset lacks all context information for the individual samples, which renders it really difficult to make sense of the PCA plot without prior knowledge. We do have plenty of context information, though, in the <code>.janno</code> file of the <code>iceWithRefSmall</code> package we prepared for the PCA in the first place. How do we access this?</p>
-<p>As the <code>.janno</code> file is a simple <code>.tsv</code> file, we can easily read it into R, for example with <code>readr::read_tsv()</code> into a generic <code>tibble</code>. Beyond that the Poseidon ecosystem includes an R package <a href="https://www.poseidon-adna.org/#/janno_r_package"><code>janno</code></a> to read <code>.janno</code> files into a more specific <code>janno</code> data structure with some additional features.</p>
+<p>As the <code>.janno</code> file is a simple <code>.tsv</code> file, we can easily read it into R, for example with <code>readr::read_tsv()</code> into a generic <code>tibble</code>.</p>
+<p>Beyond that the Poseidon ecosystem includes an R package <a href="https://www.poseidon-adna.org/#/janno_r_package"><code>janno</code></a> to read <code>.janno</code> files into a more specific <code>janno</code> data structure with some additional features.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>ref_janno <span class="ot">&lt;-</span> janno<span class="sc">::</span><span class="fu">read_janno</span>(<span class="st">"scratch/iceWithRefSmall"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -276,7 +262,8 @@ Note
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p><code>janno::read_janno()</code> applies a structural validity check to the input, transforms the columns to the correct data type for specified <code>.janno</code> columns and correctly detects list columns. At the same time the <code>janno</code> S3 class is derived from tibble and thus fully interoperable with the tidyverse.</p>
+<p><code>janno::read_janno()</code> applies a structural validity check to the input, transforms the columns to the correct data type for specified <code>.janno</code> columns and correctly detects list columns.</p>
+<p>At the same time the <code>janno</code> S3 class is derived from tibble and thus fully interoperable with the tidyverse.</p>
 </div>
 </div>
 <p>With this information ready we can easily enrich our PCA plot to make it more readable.</p>
@@ -377,7 +364,7 @@ Note
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>All “official”, pre-defined <code>.janno</code> file columns are specified as part of the package schema <a href="https://github.com/poseidon-framework/poseidon-schema/blob/master/janno_columns.tsv">here</a>. Beyond that the Poseidon websites features more detailed and concrete explanations of the columns <a href="https://www.poseidon-adna.org/#/janno_details">here</a>, for example for all columns related to sample age and dating: <a href="https://www.poseidon-adna.org/#/janno_details?id=temporal-position">Temporal position</a>.</p>
+<p>All pre-defined <code>.janno</code> file columns are specified as part of the package schema <a href="https://github.com/poseidon-framework/poseidon-schema/blob/master/janno_columns.tsv">here</a>. Beyond that the Poseidon websites features more detailed and concrete explanations of the columns <a href="https://www.poseidon-adna.org/#/janno_details">here</a>, for example for all columns related to sample age and dating: <a href="https://www.poseidon-adna.org/#/janno_details?id=temporal-position">Temporal position</a>.</p>
 </div>
 </div>
 <p>Optionally we can document this change to the package in a changelog, which we add to the package in the form of a <code>CHANGELOG.md</code> file.</p>
@@ -410,7 +397,7 @@ changelogFile: CHANGELOG.md</code></pre>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>ice_janno <span class="ot">&lt;-</span> janno<span class="sc">::</span><span class="fu">read_janno</span>(<span class="st">"scratch/ice"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>As the <code>janno</code> class is derived from <code>tibble</code> we can easily transform it to a spatial object as e.g.&nbsp;specified by the <code>sf</code> library. And we can then plot it together with arbitrary spatial reference data to create map.</p>
+<p>As the <code>janno</code> class is derived from <code>tibble</code> we can easily transform it to a spatial object as e.g.&nbsp;specified by the <code>sf</code> library. And we can then plot it together with arbitrary spatial reference data to create a (simple) map.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>ice_sf <span class="ot">&lt;-</span> ice_janno <span class="sc">%&gt;%</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  sf<span class="sc">::</span><span class="fu">st_as_sf</span>(<span class="at">coords =</span> <span class="fu">c</span>(<span class="st">"Longitude"</span>, <span class="st">"Latitude"</span>), <span class="at">crs =</span> <span class="dv">4326</span>)</span>
@@ -430,7 +417,7 @@ changelogFile: CHANGELOG.md</code></pre>
 </div>
 <p>For temporal information, the <code>janno</code> package includes a special convenience function: <code>janno::process_age()</code>. It can handle all kind of age data that can be specified for an individual sample in a Poseidon package.</p>
 <p>For C14 date calibration it runs (sum)calibration through the <a href="https://github.com/andrewcparnell/Bchron/"><code>Bchron</code></a> R package<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> to generate a post-calibration probability distribution, which in turn can be used for derived measures.</p>
-<p><code>process_age()</code> thus appends up to five additional (list) columns to the <code>janno</code> file:</p>
+<p><code>process_age()</code> appends up to five additional (list) columns to the <code>janno</code> file:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>ice_age <span class="ot">&lt;-</span> ice_janno <span class="sc">%&gt;%</span> janno<span class="sc">::</span><span class="fu">process_age</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -440,7 +427,8 @@ changelogFile: CHANGELOG.md</code></pre>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>ice_age<span class="sc">$</span>Date_BC_AD_Median_Derived</span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>ice_age<span class="sc">$</span>Date_BC_AD_Stop_Derived</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p><code>ice_age$Date_BC_AD_Prob</code> includes the full (post-calibration) year-wise probability distribution for a given sample. We can plot the distribution just as for example <a href="https://c14.arch.ox.ac.uk/oxcal.html">OxCal</a> would do it for us.</p>
+<p><code>ice_age$Date_BC_AD_Prob</code> includes the full (post-calibration) year-wise probability distribution for a given sample.</p>
+<p>We can plot the distribution similar to how for example <a href="https://c14.arch.ox.ac.uk/oxcal.html">OxCal</a> would do it for us.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>prob <span class="ot">&lt;-</span> ice_age<span class="sc">$</span>Date_BC_AD_Prob[[<span class="dv">1</span>]]</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -451,12 +439,14 @@ changelogFile: CHANGELOG.md</code></pre>
 <span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
 <span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(</span>
 <span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> prob <span class="sc">%&gt;%</span></span>
-<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>      dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">ts =</span> <span class="fu">cumsum</span>(two_sigma <span class="sc">!=</span> dplyr<span class="sc">::</span><span class="fu">lag</span>(two_sigma, <span class="at">default =</span> <span class="cn">FALSE</span>))) <span class="sc">%&gt;%</span></span>
-<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>      dplyr<span class="sc">::</span><span class="fu">filter</span>(two_sigma),</span>
-<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> age, <span class="at">y =</span> <span class="st">"sample 1"</span>, <span class="at">group =</span> ts),</span>
-<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">position =</span> <span class="fu">position_nudge</span>(<span class="at">y =</span> <span class="sc">-</span><span class="fl">0.1</span>)</span>
-<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.title.y =</span> <span class="fu">element_blank</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>      dplyr<span class="sc">::</span><span class="fu">mutate</span>(</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>        <span class="at">ts =</span> <span class="fu">cumsum</span>(two_sigma <span class="sc">!=</span> dplyr<span class="sc">::</span><span class="fu">lag</span>(two_sigma, <span class="at">default =</span> <span class="cn">FALSE</span>))</span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>      ) <span class="sc">%&gt;%</span></span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>      dplyr<span class="sc">::</span><span class="fu">filter</span>(two_sigma),</span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> age, <span class="at">y =</span> <span class="st">"sample 1"</span>, <span class="at">group =</span> ts),</span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">position =</span> <span class="fu">position_nudge</span>(<span class="at">y =</span> <span class="sc">-</span><span class="fl">0.1</span>)</span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.title.y =</span> <span class="fu">element_blank</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -464,7 +454,7 @@ changelogFile: CHANGELOG.md</code></pre>
 <figcaption class="figure-caption">Ridge plot of the post-calibration probability distribution of the radiocarbon age; the 2-sigma sections are marked with a line plot below the curve</figcaption>
 </figure>
 </div>
-<p>Though the ages sampled from the distribution in <code>ice_age$Date_BC_AD_Sample</code> may be even more important for derived applications.</p>
+<p>Random ages sampled from this distribution are available in <code>ice_age$Date_BC_AD_Sample</code> and may be even more important for further analyses.</p>
 <hr>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">

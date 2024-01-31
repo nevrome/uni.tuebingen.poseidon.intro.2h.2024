@@ -1,5 +1,4 @@
 ---
-title: "About"
 editor_options: 
   chunk_output_type: console
 execute: 
@@ -22,14 +21,18 @@ pca_out <- readRDS("scratch/pca_out.rds")
 
 This result dataset lacks all context information for the individual samples, which renders it really difficult to make sense of the PCA plot without prior knowledge. We do have plenty of context information, though, in the `.janno` file of the `iceWithRefSmall` package we prepared for the PCA in the first place. How do we access this?
 
-As the `.janno` file is a simple `.tsv` file, we can easily read it into R, for example with `readr::read_tsv()` into a generic `tibble`. Beyond that the Poseidon ecosystem includes an R package [`janno`](https://www.poseidon-adna.org/#/janno_r_package) to read `.janno` files into a more specific `janno` data structure with some additional features.
+As the `.janno` file is a simple `.tsv` file, we can easily read it into R, for example with `readr::read_tsv()` into a generic `tibble`.
+
+Beyond that the Poseidon ecosystem includes an R package [`janno`](https://www.poseidon-adna.org/#/janno_r_package) to read `.janno` files into a more specific `janno` data structure with some additional features.
 
 ```{r}
 ref_janno <- janno::read_janno("scratch/iceWithRefSmall")
 ```
 
 ::: {.callout-note}
-`janno::read_janno()` applies a structural validity check to the input, transforms the columns to the correct data type for specified `.janno` columns and correctly detects list columns. At the same time the `janno` S3 class is derived from tibble and thus fully interoperable with the tidyverse.
+`janno::read_janno()` applies a structural validity check to the input, transforms the columns to the correct data type for specified `.janno` columns and correctly detects list columns.
+
+At the same time the `janno` S3 class is derived from tibble and thus fully interoperable with the tidyverse.
 :::
 
 With this information ready we can easily enrich our PCA plot to make it more readable.
@@ -80,25 +83,21 @@ Now what about our own sample? As a first step we add the new information we rec
 Starting from
 
 ::: {.table-responsive}
-
 |Poseidon_ID|Genetic_Sex|Group_Name|Latitude|Longitude|
 |-----------|-----------|----------|--------|---------|
 |ice        |M          |iceG      |46.77   |10.83    |
-
 :::
 
 we add some additional columns for the age information.
 
 ::: {.table-responsive}
-
 |Date_Type  |Date_C14_Uncal_BP|Date_C14_Uncal_BP_Err|Date_BC_AD_Start|Date_BC_AD_Stop|
 |-----------|-----------------|---------------------|----------------|---------------|
 |C14        |4555             |34                   |n/a             |n/a            |
-
 :::
 
 ::: {.callout-note}
-All "official", pre-defined `.janno` file columns are specified as part of the package schema [here](https://github.com/poseidon-framework/poseidon-schema/blob/master/janno_columns.tsv). Beyond that the Poseidon websites features more detailed and concrete explanations of the columns [here](https://www.poseidon-adna.org/#/janno_details), for example for all columns related to sample age and dating: [Temporal position](https://www.poseidon-adna.org/#/janno_details?id=temporal-position).
+All pre-defined `.janno` file columns are specified as part of the package schema [here](https://github.com/poseidon-framework/poseidon-schema/blob/master/janno_columns.tsv). Beyond that the Poseidon websites features more detailed and concrete explanations of the columns [here](https://www.poseidon-adna.org/#/janno_details), for example for all columns related to sample age and dating: [Temporal position](https://www.poseidon-adna.org/#/janno_details?id=temporal-position).
 :::
 
 Optionally we can document this change to the package in a changelog, which we add to the package in the form of a `CHANGELOG.md` file.
@@ -132,7 +131,7 @@ With the data added, we can load the `.janno` file for our sample into R.
 ice_janno <- janno::read_janno("scratch/ice")
 ```
 
-As the `janno` class is derived from `tibble` we can easily transform it to a spatial object as e.g. specified by the `sf` library. And we can then plot it together with arbitrary spatial reference data to create map.
+As the `janno` class is derived from `tibble` we can easily transform it to a spatial object as e.g. specified by the `sf` library. And we can then plot it together with arbitrary spatial reference data to create a (simple) map.
 
 ```{r}
 ice_sf <- ice_janno %>%
@@ -163,7 +162,7 @@ For temporal information, the `janno` package includes a special convenience fun
 
 For C14 date calibration it runs (sum)calibration through the [`Bchron`](https://github.com/andrewcparnell/Bchron/) R package^[@Bchron2008] to generate a post-calibration probability distribution, which in turn can be used for derived measures.
 
-`process_age()` thus appends up to five additional (list) columns to the `janno` file:
+`process_age()` appends up to five additional (list) columns to the `janno` file:
 
 ```{r}
 ice_age <- ice_janno %>% janno::process_age()
@@ -177,7 +176,9 @@ ice_age$Date_BC_AD_Median_Derived
 ice_age$Date_BC_AD_Stop_Derived
 ```
 
-`ice_age$Date_BC_AD_Prob` includes the full (post-calibration) year-wise probability distribution for a given sample. We can plot the distribution just as for example [OxCal](https://c14.arch.ox.ac.uk/oxcal.html) would do it for us.
+`ice_age$Date_BC_AD_Prob` includes the full (post-calibration) year-wise probability distribution for a given sample.
+
+We can plot the distribution similar to how for example [OxCal](https://c14.arch.ox.ac.uk/oxcal.html) would do it for us.
 
 ```{r}
 prob <- ice_age$Date_BC_AD_Prob[[1]]
@@ -189,7 +190,9 @@ p <- ggplot() +
   ) +
   geom_line(
     data = prob %>%
-      dplyr::mutate(ts = cumsum(two_sigma != dplyr::lag(two_sigma, default = FALSE))) %>%
+      dplyr::mutate(
+        ts = cumsum(two_sigma != dplyr::lag(two_sigma, default = FALSE))
+      ) %>%
       dplyr::filter(two_sigma),
     mapping = aes(x = age, y = "sample 1", group = ts),
     position = position_nudge(y = -0.1)
@@ -210,7 +213,7 @@ ggsave(
 
 ![Ridge plot of the post-calibration probability distribution of the radiocarbon age; the 2-sigma sections are marked with a line plot below the curve](img/c14ridge.png)
 
-Though the ages sampled from the distribution in `ice_age$Date_BC_AD_Sample` may be even more important for derived applications.
+Random ages sampled from this distribution are available in `ice_age$Date_BC_AD_Sample` and may be even more important for further analyses.
 
 ***
 
