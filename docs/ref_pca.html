@@ -239,11 +239,11 @@ div.csl-indent {
 
 <section id="analyzing-our-data-with-reference-data" class="level2">
 <h2 class="anchored" data-anchor-id="analyzing-our-data-with-reference-data">Analyzing our data with reference data</h2>
-<p>With our data neatly packaged we can approach the actual challenge of reconstructing its genetic affiliation and origin story. To do so we require reference data to compare it to, e.g.&nbsp;with a principal component analysis.</p>
+<p>With our data neatly packaged we can approach the actual challenge of reconstructing its genetic affiliation and origin story. To do so we require reference data to compare it to, for example with a principal component analysis.</p>
 <section id="acquiring-modern-reference-data" class="level3">
 <h3 class="anchored" data-anchor-id="acquiring-modern-reference-data">Acquiring modern reference data</h3>
 <p>In its public <a href="https://www.poseidon-adna.org/#/archive_overview">community-archive</a> the Poseidon ecosystem features a curated set of publication-wise packages with ancient and modern genotype data.</p>
-<p>We can get an overview over all publication-wise packages available there with <code>trident</code>’s <a href="https://www.poseidon-adna.org/#/trident?id=list-command"><code>list</code></a> subcommand:</p>
+<p>We can get an overview over all packages available there with <code>trident</code>’s <a href="https://www.poseidon-adna.org/#/trident?id=list-command"><code>list</code></a> subcommand if we employ the <code>--remote</code> flag for interaction with the open web API:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">trident</span> list <span class="at">--remote</span> <span class="at">--packages</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -257,10 +257,10 @@ Note
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>A more interactive way to get an overview is the <a href="https://www.poseidon-adna.org/#/archive_explorer">archive explorer</a> on the Poseidon website.</p>
+<p>A more interactive way to get an overview beyond the command line is the <a href="https://www.poseidon-adna.org/#/archive_explorer">archive explorer</a> on the Poseidon website. This small web app works also by querying the API.</p>
 </div>
 </div>
-<p>As our sample of interest was found in Western Eurasia a first valuable point of reference is genotype data from various modern populations from there. The following list includes a number of relevant populations. It can be downloaded <a href="https://raw.githubusercontent.com/nevrome/mobest.analysis.2022/master/code/01_data_preparation/modern_western_eurasian_populations.txt">here</a>.</p>
+<p>As our sample of interest was found in Western Eurasia, a first valuable point of reference is genotype data from various modern populations from there. The following list includes a number of relevant populations. It can be downloaded <a href="https://raw.githubusercontent.com/nevrome/mobest.analysis.2022/master/code/01_data_preparation/modern_western_eurasian_populations.txt">here</a>.</p>
 <div class="scrolling">
 <div class="code-with-filename">
 <div class="code-with-filename-file">
@@ -344,9 +344,13 @@ Turkish
 Ukrainian</code></pre>
 </div>
 </div>
-<p><code>trident</code> includes the <a href="https://www.poseidon-adna.org/#/trident?id=fetch-command"><code>fetch</code></a> subcommand, which allows to download packages that contain samples with this group attribution from the community archive.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">trident</span> fetch <span class="at">-d</span> refData <span class="at">--fetchFile</span> modern_western_eurasian_populations.txt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">wget</span> https://raw.githubusercontent.com/nevrome/mobest.analysis.2022/master/code/01_data_preparation/modern_western_eurasian_populations.txt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><code>trident</code> includes the <a href="https://www.poseidon-adna.org/#/trident?id=fetch-command"><code>fetch</code></a> subcommand to download entire packages from the web API. Besides selecting entire packages for download, it also allows to identify and download packages that contain samples with a certain group attribution.</p>
+<p>We can use this feature to download all packages that contain samples for the desired reference populations listed above.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">trident</span> fetch <span class="at">-d</span> refData <span class="at">--fetchFile</span> modern_western_eurasian_populations.txt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <pre><code>refData
 ├── 2012_PattersonGenetics-2.1.3
@@ -354,21 +358,21 @@ Ukrainian</code></pre>
 ├── 2016_LazaridisNature-2.1.3
 ├── 2019_Biagini_Spain-2.2.1
 └── 2019_Jeong_InnerEurasia-3.0.1</code></pre>
-<p>This works, because the population list above already has the same structure as the selection language trident uses for <code>fetch</code> and <code>forge</code>.</p>
+<p>This works, because the population list above already has the same structure as the selection language <code>trident</code> uses for <code>fetch</code> and <code>forge</code>.</p>
 </section>
 <section id="merging-the-reference-data-with-our-data" class="level3">
 <h3 class="anchored" data-anchor-id="merging-the-reference-data-with-our-data">Merging the reference data with our data</h3>
 <p>We now have our own Poseidon package for the ice mummy in a directory <code>ice</code> and various packages with modern reference data in <code>refData</code>. Our package features genotype data in EIGENSTRAT format, the reference data packages include data in PLINKs binary format.</p>
-<p><code>trident</code>s most notable feature is the ability to merge the exact samples we require from both data sources at once with the <a href="https://www.poseidon-adna.org/#/trident?id=forge-command"><code>forge</code></a> subcommand.</p>
+<p><code>trident</code>s most notable feature is the ability to merge the exact samples we require into a new package from both data sources at once with the <a href="https://www.poseidon-adna.org/#/trident?id=forge-command"><code>forge</code></a> subcommand.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">trident</span> forge <span class="dt">\</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">-d</span> refData <span class="dt">\</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">-d</span> ice <span class="dt">\</span></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">--forgeFile</span> modern_western_eurasian_populations.txt <span class="dt">\</span></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">-f</span> <span class="st">"&lt;ice&gt;"</span> <span class="dt">\</span></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">--outFormat</span> EIGENSTRAT <span class="dt">\</span></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">--intersect</span> <span class="dt">\</span></span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">-o</span> iceWithRef</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">trident</span> forge <span class="dt">\</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">-d</span> refData <span class="dt">\</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">-d</span> ice <span class="dt">\</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">--forgeFile</span> modern_western_eurasian_populations.txt <span class="dt">\</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">-f</span> <span class="st">"&lt;ice&gt;"</span> <span class="dt">\</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">--outFormat</span> EIGENSTRAT <span class="dt">\</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">--intersect</span> <span class="dt">\</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">-o</span> iceWithRef</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Note how we list two directories as data sources with <code>-d</code>/<code>--baseDir</code>. <code>forge</code> discovers and reads all Poseidon packages both in <code>refData</code> and <code>ice</code>.</p>
 <p>It then constructs a subset- and merge operation, by parsing the selection language from both the <code>--forgeFile</code> <code>modern_western_eurasian_populations.txt</code> and the individual forge string <code>-f</code> <code>"&lt;ice&gt;"</code>.</p>
@@ -382,41 +386,54 @@ Note
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>The <code>forge</code> language is a powerful DSL (domain specific language) that allows positive and negative selection of individuals (in <code>&lt;...&gt;</code>), populations and Poseidon packages (in <code>*...*</code>). It’s documented <a href="https://www.poseidon-adna.org/#/trident?id=the-forge-selection-language">here</a>.</p>
+<p>The <code>forge</code> language is a powerful DSL (domain specific language) that allows positive and negative selection of individuals (in <code>&lt;...&gt;</code>), populations and Poseidon packages (in <code>*...*</code>). It is documented on the Poseidon website <a href="https://www.poseidon-adna.org/#/trident?id=the-forge-selection-language">here</a>.</p>
 </div>
 </div>
 <p><code>forge</code> reads both data in EIGENSTRAT and in PLINK’s binary format in constant memory via stream-processing. It can also produce both formats for the output package, though the default is the more space efficient PLINK format, so we have to set <code>--outFormat EIGENSTRAT</code> here for our downstream applications.</p>
 <p>The <code>--intersect</code> flag is a reaction to the fact that our input packages feature different SNP sets: Some include only the ~600.000 HumanOrigins SNPs, others the ~1.240.000 1240K SNPs. As a default <code>forge</code> returns the union of all SNP sets it encounters, which would here yield many missing entries for the modern reference data.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><code>trident forge</code> can also create output packages with a specific SNP set using the <code>--selectSnps</code> option. This option takes either a <code>.snp</code> (EIGENSTRAT) or a <code>.bim</code> (PLINK) file with the desired SNPs. Any SNP not listed in the file will be excluded.</p>
+</div>
+</div>
 <p>When the forge process has completed we can inspect the result with the <a href="https://www.poseidon-adna.org/#/trident?id=summarise-command"><code>summarize</code></a> subcommand:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">trident</span> summarize <span class="at">-d</span> iceWithRef</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">trident</span> summarize <span class="at">-d</span> iceWithRef</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="reducing-the-data-size" class="level3">
 <h3 class="anchored" data-anchor-id="reducing-the-data-size">Reducing the data size</h3>
 <p>Our <code>iceWithRef</code> package is ready for downstream analysis, but it is also a bit bulky. It includes, for example, 314 Russian samples alone. We could probably reduce its size without loosing much statistical power for the PCA we want to run below.</p>
-<p>One way of doing so would be, to limit the maximum number of samples per population. We can easily subset the package with <code>trident forge</code>, if we can obtain a list of samples we want to keep. But how do we get this list?</p>
-<p>The Poseidon framework includes the <a href="https://www.poseidon-adna.org/#/qjanno"><code>qjanno</code></a> software tool that allows to query arbitrary .janno and .txt files as SQLite database tables and thus enable advanced selection operations.</p>
+<p>One way of doing so would be to limit the maximum number of samples per population. We can easily subset the package with <code>trident forge</code>, if we can obtain a list of samples we want to keep. But how do we get this list?</p>
+<p>The Poseidon framework includes the <a href="https://www.poseidon-adna.org/#/qjanno"><code>qjanno</code></a> software tool that allows to query arbitrary <code>.janno</code> and <code>.txt</code> files as SQLite database tables and thus enables advanced selection operations.</p>
 <p>We can install it just as <code>trident</code>:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># download the current stable release binary</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">wget</span> https://github.com/poseidon-framework/qjanno/releases/latest/download/qjanno-Linux</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co"># rename it to simply qjanno</span></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="fu">mv</span> qjanno-Linux qjanno</span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="co"># make it executable</span></span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="fu">chmod</span> +x qjanno</span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="co"># run it to test if it is working</span></span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="ex">./qjanno</span> <span class="at">-h</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># download the current stable release binary</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">wget</span> https://github.com/poseidon-framework/qjanno/releases/latest/download/qjanno-Linux</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co"># rename it to simply qjanno</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="fu">mv</span> qjanno-Linux qjanno</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="co"># make it executable</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="fu">chmod</span> +x qjanno</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="co"># run it to test if it is working</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="ex">./qjanno</span> <span class="at">-h</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>With qjanno ready we can query the .janno file for arbitrary information, e.g.&nbsp;the number of samples from each country.</p>
+<p>With <code>qjanno</code> ready we can query <code>.janno</code> files for arbitrary information, e.g.&nbsp;the number of samples from each country.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">./qjanno</span> <span class="st">"</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="st">SELECT   Country,</span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="st">         count(*) as n</span></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="st">FROM     d(iceWithRef)</span></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="st">GROUP BY Country</span></span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="st">ORDER BY n</span></span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="st">"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">./qjanno</span> <span class="st">"</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="st">SELECT   Country,</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="st">         count(*) as n</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="st">FROM     d(iceWithRef)</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="st">GROUP BY Country</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="st">ORDER BY n</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="st">"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -428,7 +445,7 @@ Note
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>The <code>d()</code> pseudo-function in the <code>FROM ...</code> field of the query is one of three pseudo-functions to automatically search for .janno files to load them into <code>qjanno</code>. Read more about that <a href="https://www.poseidon-adna.org/#/qjanno?id=the-janno-crawling-pseudo-functions"><code>here</code></a>.</p>
+<p>The <code>d()</code> pseudo-function in the <code>FROM ...</code> field of the query is one of three pseudo-functions to automatically search for <code>.janno</code> files to load them into <code>qjanno</code>. Read more about that <a href="https://www.poseidon-adna.org/#/qjanno?id=the-janno-crawling-pseudo-functions">here</a>.</p>
 </div>
 </div>
 <div class="callout callout-style-default callout-note callout-titled">
@@ -443,37 +460,37 @@ Note
 <div class="callout-body-container callout-body">
 <p>If we forget the available columns in <code>.janno</code> files the <code>-c</code> option returns a list for us:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">qjanno</span> <span class="st">"SELECT * FROM d(iceWithRef)"</span> <span class="at">-c</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="ex">qjanno</span> <span class="st">"SELECT * FROM d(iceWithRef)"</span> <span class="at">-c</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </div>
 <p>With this power we can construct a two-step query for random samples for each group.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># construct a randomly ordered list of groups and their samples</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="ex">qjanno</span> <span class="st">"</span></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="st">SELECT Poseidon_ID,</span></span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="st">       Group_Name,</span></span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="st">       row_number() OVER (PARTITION BY Group_Name ORDER BY random()) rn</span></span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="st">FROM   d(iceWithRef)</span></span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="st">"</span> <span class="at">--raw</span> <span class="op">&gt;</span> id_per_sample.txt</span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> id_per_sample.txt</span>
-<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="co"># subset samples from that list and render a forge selection language file</span></span>
-<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a><span class="ex">qjanno</span> <span class="st">"</span></span>
-<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a><span class="st">SELECT   '&lt;'||Poseidon_ID||'&gt;'</span></span>
-<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a><span class="st">FROM     id_per_sample.txt</span></span>
-<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a><span class="st">WHERE    rn &lt;= 10</span></span>
-<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a><span class="st">ORDER BY Group_Name DESC;</span></span>
-<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a><span class="st">"</span> <span class="at">--raw</span> <span class="at">--noOutHeader</span> <span class="op">&gt;</span> ten_samples_max.txt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># construct a randomly ordered list of groups and their samples</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="ex">qjanno</span> <span class="st">"</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="st">SELECT Poseidon_ID,</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="st">       Group_Name,</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="st">       row_number() OVER (PARTITION BY Group_Name ORDER BY random()) rn</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="st">FROM   d(iceWithRef)</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="st">"</span> <span class="at">--raw</span> <span class="op">&gt;</span> id_per_sample.txt</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> id_per_sample.txt</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="co"># subset samples from that list and render a forge selection language file</span></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a><span class="ex">qjanno</span> <span class="st">"</span></span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a><span class="st">SELECT   '&lt;'||Poseidon_ID||'&gt;'</span></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a><span class="st">FROM     id_per_sample.txt</span></span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a><span class="st">WHERE    rn &lt;= 10</span></span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a><span class="st">ORDER BY Group_Name DESC;</span></span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a><span class="st">"</span> <span class="at">--raw</span> <span class="at">--noOutHeader</span> <span class="op">&gt;</span> ten_samples_max.txt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><code>ten_samples_max.txt</code> again has the structure of the <code>forge</code> selection language and we can run it with it to derive a smaller analysis dataset.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="ex">trident</span> forge <span class="dt">\</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">-d</span> iceWithRef <span class="dt">\</span></span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">--forgeFile</span> ten_samples_max.txt <span class="dt">\</span></span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">--outFormat</span> EIGENSTRAT <span class="dt">\</span></span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">-o</span> iceWithRefSmall</span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="ex">trident</span> summarize <span class="at">-d</span> iceWithRefSmall</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="ex">trident</span> forge <span class="dt">\</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">-d</span> iceWithRef <span class="dt">\</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">--forgeFile</span> ten_samples_max.txt <span class="dt">\</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">--outFormat</span> EIGENSTRAT <span class="dt">\</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">-o</span> iceWithRefSmall</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="ex">trident</span> summarize <span class="at">-d</span> iceWithRefSmall</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -495,39 +512,39 @@ Note
 <p>After all these technicalities we can finally go back to the scientific question that motivated all of this: What is the genetic profile of the ice mummy Prof.&nbsp;P. had found in the Tyrolean Alps?</p>
 <p>Here we use the <code>smart_pca()</code> function from the <a href="https://github.com/ChristianHuber/smartsnp"><code>smartsnp</code></a> R package<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># read the ind file</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>ind <span class="ot">&lt;-</span> readr<span class="sc">::</span><span class="fu">read_tsv</span>(</span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">"scratch/iceWithRefSmall/iceWithRefSmall.ind"</span>,</span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">col_names =</span> <span class="fu">c</span>(<span class="st">"id"</span>, <span class="st">"sex"</span>, <span class="st">"pop"</span>)</span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="co"># run smart_snp() with the iceWithRefSmall dataset</span></span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>pca_out <span class="ot">&lt;-</span> smartsnp<span class="sc">::</span><span class="fu">smart_pca</span>(</span>
-<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>  <span class="st">"scratch/iceWithRefSmall/iceWithRefSmall.geno"</span>,</span>
-<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">sample_group =</span> <span class="fu">seq_len</span>(<span class="fu">nrow</span>(ind)),</span>
-<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">missing_impute =</span> <span class="st">"mean"</span>,</span>
-<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>  <span class="co"># project the "ice" sample in the pca space constructed</span></span>
-<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>  <span class="co"># with modern reference data</span></span>
-<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">sample_project =</span> <span class="fu">which</span>(ind<span class="sc">$</span>id <span class="sc">==</span> <span class="st">"ice"</span>),</span>
-<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">pc_axes =</span> <span class="dv">2</span></span>
-<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># read the ind file</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>ind <span class="ot">&lt;-</span> readr<span class="sc">::</span><span class="fu">read_tsv</span>(</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">"scratch/iceWithRefSmall/iceWithRefSmall.ind"</span>,</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">col_names =</span> <span class="fu">c</span>(<span class="st">"id"</span>, <span class="st">"sex"</span>, <span class="st">"pop"</span>)</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="co"># run smart_snp() with the iceWithRefSmall dataset</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>pca_out <span class="ot">&lt;-</span> smartsnp<span class="sc">::</span><span class="fu">smart_pca</span>(</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>  <span class="st">"scratch/iceWithRefSmall/iceWithRefSmall.geno"</span>,</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">sample_group =</span> <span class="fu">seq_len</span>(<span class="fu">nrow</span>(ind)),</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">missing_impute =</span> <span class="st">"mean"</span>,</span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>  <span class="co"># project the "ice" sample in the pca space constructed</span></span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>  <span class="co"># with modern reference data</span></span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">sample_project =</span> <span class="fu">which</span>(ind<span class="sc">$</span>id <span class="sc">==</span> <span class="st">"ice"</span>),</span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">pc_axes =</span> <span class="dv">2</span></span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>We can save this intermediate result in the file system.</p>
+<p>We should probably save this intermediate result in the file system.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(pca_out, <span class="at">file =</span> <span class="st">"scratch/pca_out.rds"</span>)</span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="co">#pca_out &lt;- readRDS("scratch/pca_out.rds")</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(pca_out, <span class="at">file =</span> <span class="st">"scratch/pca_out.rds"</span>)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="co">#pca_out &lt;- readRDS("scratch/pca_out.rds")</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>And we can finally plot it like this:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(magrittr)</span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> pca_out<span class="sc">$</span>pca.sample_coordinates <span class="sc">%&gt;%</span></span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(</span>
-<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">x =</span> PC1, <span class="at">y =</span> PC2, <span class="at">color =</span> Class)</span>
-<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_reverse</span>() <span class="sc">+</span></span>
-<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_fixed</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(magrittr)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> pca_out<span class="sc">$</span>pca.sample_coordinates <span class="sc">%&gt;%</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">x =</span> PC1, <span class="at">y =</span> PC2, <span class="at">color =</span> Class)</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_reverse</span>() <span class="sc">+</span></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_fixed</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -550,7 +567,7 @@ Learn more about…
 <li>The Poseidon public archives: <a href="https://www.poseidon-adna.org/#/archive_overview">Public Poseidon archives</a></li>
 <li>The <code>forge</code> selection language: <a href="https://blog.poseidon-adna.org/posts/trident_14.html">Trident’s restaurant - your order please?</a></li>
 <li>The <code>qjanno</code> software tool: <a href="https://www.poseidon-adna.org/#/qjanno">qjanno CLI software</a></li>
-<li>The <code>smartsnp</code> R package for this data: <a href="https://christianhuber.github.io/smartsnp/articles/aDNA_smartpca_analysis.html">Vignette: Projecting ancient samples</a></li>
+<li>PCA with the <code>smartsnp</code> R package: <a href="https://christianhuber.github.io/smartsnp/articles/aDNA_smartpca_analysis.html">Vignette: Projecting ancient samples</a></li>
 </ul>
 </div>
 </div>
