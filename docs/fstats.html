@@ -259,14 +259,36 @@ div.csl-indent {
 </section>
 <section id="calculating-f-statistics-with-xerxes" class="level3">
 <h3 class="anchored" data-anchor-id="calculating-f-statistics-with-xerxes">Calculating F-statistics with xerxes</h3>
-<p>For the ice mummy we previously concluded from the PCA plot, that it seems to feature an ancestry profile not unlike the of what we can observe for present day Sardinians. It plots far closer to them than for example to modern-day English reference genomes. <code>xerxes</code> allows us to test this specific comparison with a test encoded as <code>F4(&lt;Chimp.REF&gt;,&lt;ice&gt;,Sardinian,French)</code> vs.&nbsp;<code>F4(&lt;Chimp.REF&gt;,&lt;ice&gt;,English,French)</code>, so <span class="math inline">\(\textrm{F4}(\textrm{Chimp},\textrm{Ice mummy};\textrm{Sardinian},\textrm{French})\)</span> vs.&nbsp;<span class="math inline">\(\textrm{F4}(\textrm{Chimp},\textrm{Ice mummy};\textrm{English},\textrm{French})\)</span>.</p>
+<p>For the ice mummy we previously concluded from the PCA plot, that it seems to feature an ancestry profile not unlike the of what we can observe for present day Sardinians. It plots far closer to them than for example to modern-day English or Syrian reference genomes.</p>
+<p><code>xerxes</code> allows us to test this specific comparison with a test encoded as <code>F4(&lt;Chimp.REF&gt;,&lt;ice&gt;,Sardinian,English)</code> vs.&nbsp;<code>F4(&lt;Chimp.REF&gt;,&lt;ice&gt;,Sardinian,Syrian)</code>, so <span class="math inline">\(\textrm{F4}(\textrm{Chimp},\textrm{Ice mummy};\textrm{Sardinian},\textrm{English})\)</span> vs.&nbsp;<span class="math inline">\(\textrm{F4}(\textrm{Chimp},\textrm{Ice mummy};\textrm{Sardinian},\textrm{Syrian})\)</span>.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># download the Reference_Genomes package for the Chimp genome</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">trident</span> fetch <span class="at">-d</span> refData <span class="at">-f</span> <span class="st">"*Reference_Genomes*"</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co"># run the two F4 tests</span></span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="ex">xerxes</span> fstats <span class="at">-d</span> refData <span class="at">-d</span> ice <span class="dt">\</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">--stat</span> <span class="st">'F4(&lt;Chimp.REF&gt;,&lt;ice&gt;,Sardinian,French)'</span> <span class="dt">\</span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">--stat</span> <span class="st">'F4(&lt;Chimp.REF&gt;,&lt;ice&gt;,English,French)'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">--stat</span> <span class="st">'F4(&lt;Chimp.REF&gt;,&lt;ice&gt;,Sardinian,English)'</span> <span class="dt">\</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">--stat</span> <span class="st">'F4(&lt;Chimp.REF&gt;,&lt;ice&gt;,Sardinian,Syrian)'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Result
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<pre><code>.-----------.-------------.-------.-----------.---------.---------.----------------.--------------------.------------------.---------------------.
+| Statistic |      a      |   b   |     c     |    d    | NrSites | Estimate_Total | Estimate_Jackknife | StdErr_Jackknife |  Z_score_Jackknife  |
+:===========:=============:=======:===========:=========:=========:================:====================:==================:=====================:
+| F4        | &lt;Chimp.REF&gt; | &lt;ice&gt; | Sardinian | English | 576238  | -1.2466e-3     | -1.2466e-3         | 1.9460e-4        | -6.405727163485704  |
+| F4        | &lt;Chimp.REF&gt; | &lt;ice&gt; | Sardinian | Syrian  | 576238  | -5.1555e-3     | -5.1556e-3         | 2.4038e-4        | -21.448186106644844 |
+'-----------'-------------'-------'-----------'---------'---------'----------------'--------------------'------------------'---------------------'</code></pre>
+</div>
+</div>
 </div>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -278,21 +300,20 @@ Note
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p><code>xerxes</code> uses stream-processing to read samples from different Poseidon packages simultaneously and with small memory footprint.</p>
+<p>Just as <code>trident</code> <code>xerxes</code> uses stream-processing to read samples from different Poseidon packages simultaneously and with small memory footprint. Specific statistics can be requested with another powerful DSL documented <a href="https://www.poseidon-adna.org/#/xerxes?id=allowed-statistics">here</a>.</p>
 </div>
 </div>
-<p>This command line interface is suitable for a small set of targeted tests. For bigger test series where we want to explore large sets of permutations among the individuals and populations of interest <code>xerxes</code> features a powerful .yml based configuration file format.</p>
+<p>This command line interface is suitable for a small set of targeted tests. For bigger test series where we want to explore large sets of permutations among the individuals and populations of interest <code>xerxes</code> features a <code>.yml</code> based configuration file format.</p>
 <div class="cell" data-file.name="f4.config">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode yml code-with-copy"><code class="sourceCode yaml"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fstats</span><span class="kw">:</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="kw">-</span><span class="at"> </span><span class="fu">type</span><span class="kw">:</span><span class="at"> F4</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">a</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="st">"&lt;Chimp.REF&gt;"</span><span class="kw">]</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">b</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="st">"&lt;Iceman.SG&gt;"</span><span class="kw">]</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">c</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="st">"English"</span><span class="kw">,</span><span class="at"> </span><span class="st">"Sardinian"</span><span class="kw">]</span></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">d</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="st">"French"</span><span class="kw">]</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode yml code-with-copy"><code class="sourceCode yaml"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fstats</span><span class="kw">:</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="kw">-</span><span class="at"> </span><span class="fu">type</span><span class="kw">:</span><span class="at"> F4</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">a</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="st">"&lt;Chimp.REF&gt;"</span><span class="kw">]</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">b</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="st">"&lt;Iceman.SG&gt;"</span><span class="kw">]</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">c</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="st">"Sardinian"</span><span class="kw">]</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">d</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="st">"English"</span><span class="kw">,</span><span class="at"> </span><span class="st">"Syrian"</span><span class="kw">]</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">xerxes</span> fstats <span class="at">-d</span> ref_data <span class="dt">\</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">--statConfig</span> f4.config</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">xerxes</span> fstats <span class="at">-d</span> ref_data <span class="at">--statConfig</span> f4.config</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -304,54 +325,78 @@ Note
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>This config file format allows to define groups dynamically with a simple selection syntax. This includes both positive and negative selection</p>
+<p>This config file format allows to define groups dynamically with a simple selection syntax. This includes both positive and negative selection, as in this example:</p>
 <div class="cell" data-file.name="f4.config">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode yml code-with-copy"><code class="sourceCode yaml"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">groupDefs</span><span class="kw">:</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">FR</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="st">"French"</span><span class="kw">,</span><span class="at"> </span><span class="st">"French.SDG"</span><span class="kw">,</span><span class="at"> </span><span class="st">"-&lt;French23812&gt;"</span><span class="kw">,</span><span class="at"> </span><span class="st">"-&lt;French23830&gt;"</span><span class="kw">]</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">EN</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="st">"English"</span><span class="kw">,</span><span class="at"> </span><span class="st">"-&lt;HG00131&gt;"</span><span class="kw">]</span></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="fu">fstats</span><span class="kw">:</span></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="kw">-</span><span class="at"> </span><span class="fu">type</span><span class="kw">:</span><span class="at"> F4</span></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">a</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="st">"&lt;Chimp.REF&gt;"</span><span class="kw">]</span></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">b</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="st">"&lt;Iceman.SG&gt;"</span><span class="kw">]</span></span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">c</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="st">"EN"</span><span class="kw">,</span><span class="at"> </span><span class="st">"Sardinian"</span><span class="kw">]</span></span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">d</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="st">"FR"</span><span class="kw">]</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode yml code-with-copy"><code class="sourceCode yaml"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">groupDefs</span><span class="kw">:</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">FR</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="st">"French"</span><span class="kw">,</span><span class="at"> </span><span class="st">"French.SDG"</span><span class="kw">,</span><span class="at"> </span><span class="st">"-&lt;French23812&gt;"</span><span class="kw">,</span><span class="at"> </span><span class="st">"-&lt;French23830&gt;"</span><span class="kw">]</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">EN</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="st">"English"</span><span class="kw">,</span><span class="at"> </span><span class="st">"-&lt;HG00131&gt;"</span><span class="kw">]</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="fu">fstats</span><span class="kw">:</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="kw">-</span><span class="at"> </span><span class="fu">type</span><span class="kw">:</span><span class="at"> F4</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">a</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="st">"&lt;Chimp.REF&gt;"</span><span class="kw">]</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">b</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="st">"&lt;Iceman.SG&gt;"</span><span class="kw">]</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">c</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="st">"EN"</span><span class="kw">,</span><span class="at"> </span><span class="st">"Sardinian"</span><span class="kw">]</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">d</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="st">"FR"</span><span class="kw">]</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>It also allow to list multiple different statistics in the <code>fstats</code> block, which will then all be calculated in one <code>xerxes</code> run.</p>
 </div>
 </div>
-<p>The F4 test shown here is not particular interesting though - we typically want to dive much deeper and beyond modern reference genomes. One relevant question for for an ancient sample from Western Eurasia may be, to which major ancestry components it has the strongest affinities: <em>Western Hunter-Gatherer</em> ancestry, <em>Ancient Near-Eastern</em> ancestry or <em>Steppe</em> ancestry.</p>
-<p>Each of these components is represented by multiple ancient reference genomes, each in turn grouped into <em>populations</em> by their shared origin in space, time and by the archaeological material they are associated with. Here we run one possible outgroup-F3 test with three individual reference populations<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>.</p>
+<p>The F4 test shown here is not particular interesting though - we typically want to dive much deeper and beyond modern reference genomes.</p>
+<p>One relevant question for for an ancient sample from Western Eurasia may be, to which major ancestry components it has the strongest affinities: <em>Western Hunter-Gatherer</em> ancestry, <em>Ancient Near-Eastern</em> ancestry or <em>Steppe</em> ancestry.</p>
+<p>Each of these components is represented by multiple ancient reference genomes, each in turn grouped into <em>populations</em> by their shared origin in space, time and by the archaeological material they are associated with.</p>
+<p>Here we run one possible outgroup-F3 test with three individual reference populations<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># download the various packages that include samples for the desired</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co"># reference genomes</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="ex">trident</span> fetch <span class="at">-d</span> refData <span class="dt">\ </span></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="ex">-f</span> <span class="st">"Austria_EN_LBK, Croatia_Mesolithic_HG, Russia_Samara_EBA_Yamnaya, Mbuti.DG"</span></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co"># run three F3 tests</span></span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="ex">xerxes</span> fstats <span class="at">-d</span> refData <span class="at">-d</span> ice <span class="dt">\</span></span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">--stat</span> <span class="st">'F3(&lt;ice&gt;,Austria_EN_LBK,Mbuti.DG)'</span> <span class="dt">\</span></span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">--stat</span> <span class="st">'F3(&lt;ice&gt;,Croatia_Mesolithic_HG,Mbuti.DG)'</span> <span class="dt">\</span></span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">--stat</span> <span class="st">'F3(&lt;ice&gt;,Russia_Samara_EBA_Yamnaya,Mbuti.DG)'</span> <span class="dt">\</span></span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">-f</span> outgroupF3.tsv</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># download the various packages that include samples for the desired</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="co"># reference genomes</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="ex">trident</span> fetch <span class="at">-d</span> refData <span class="dt">\</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">-f</span> <span class="st">"Austria_EN_LBK, Croatia_Mesolithic_HG, Russia_Samara_EBA_Yamnaya, Mbuti.DG"</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="co"># run three F3 tests</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="ex">xerxes</span> fstats <span class="at">-d</span> refData <span class="at">-d</span> ice <span class="dt">\</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">--stat</span> <span class="st">'F3(&lt;ice&gt;,Austria_EN_LBK,Mbuti.DG)'</span> <span class="dt">\</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">--stat</span> <span class="st">'F3(&lt;ice&gt;,Croatia_Mesolithic_HG,Mbuti.DG)'</span> <span class="dt">\</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">--stat</span> <span class="st">'F3(&lt;ice&gt;,Russia_Samara_EBA_Yamnaya,Mbuti.DG)'</span> <span class="dt">\</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">-f</span> outgroupF3.tsv</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Here we wrote the results to an output file, which we can read into R to visualize the relevant estimates.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Result
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<pre><code>.-----------.-------.---------------------------.----------.---.---------.----------------.--------------------.------------------.--------------------.
+| Statistic |   a   |             b             |    c     | d | NrSites | Estimate_Total | Estimate_Jackknife | StdErr_Jackknife | Z_score_Jackknife  |
+:===========:=======:===========================:==========:===:=========:================:====================:==================:====================:
+| F3        | &lt;ice&gt; | Austria_EN_LBK            | Mbuti.DG |   | 1062635 | 6.7836e-2      | 6.7836e-2          | 6.7613e-4        | 100.32934046821724 |
+| F3        | &lt;ice&gt; | Croatia_Mesolithic_HG     | Mbuti.DG |   | 357955  | 6.4957e-2      | 6.4957e-2          | 8.9114e-4        | 72.89261547148921  |
+| F3        | &lt;ice&gt; | Russia_Samara_EBA_Yamnaya | Mbuti.DG |   | 1059817 | 6.2104e-2      | 6.2105e-2          | 6.8072e-4        | 91.23382806436632  |
+'-----------'-------'---------------------------'----------'---'---------'----------------'--------------------'------------------'--------------------'</code></pre>
+</div>
+</div>
+</div>
+<p>With <code>-f outgroupF3.tsv</code> we wrote the results into an output file, which we can read into R to visualize the relevant estimates.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(magrittr)</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>outgroup_f3 <span class="ot">&lt;-</span> readr<span class="sc">::</span><span class="fu">read_tsv</span>(<span class="st">"scratch/outgroupF3.tsv"</span>)</span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> outgroup_f3 <span class="sc">%&gt;%</span></span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> b, <span class="at">y =</span> Estimate_Jackknife)) <span class="sc">+</span></span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_errorbar</span>(</span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(</span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>      <span class="at">x =</span> b,</span>
-<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>      <span class="at">ymin =</span> Estimate_Jackknife <span class="sc">-</span> StdErr_Jackknife,</span>
-<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>      <span class="at">ymax =</span> Estimate_Jackknife <span class="sc">+</span> StdErr_Jackknife</span>
-<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>    ), <span class="at">width =</span> <span class="fl">0.2</span></span>
-<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_flip</span>() <span class="sc">+</span></span>
-<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_discrete</span>(<span class="at">limits =</span> rev) <span class="sc">+</span></span>
-<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.title.y =</span> <span class="fu">element_blank</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(magrittr)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>outgroup_f3 <span class="ot">&lt;-</span> readr<span class="sc">::</span><span class="fu">read_tsv</span>(<span class="st">"scratch/outgroupF3.tsv"</span>)</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> outgroup_f3 <span class="sc">%&gt;%</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> b, <span class="at">y =</span> Estimate_Jackknife)) <span class="sc">+</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_errorbar</span>(</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>      <span class="at">x =</span> b,</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>      <span class="at">ymin =</span> Estimate_Jackknife <span class="sc">-</span> StdErr_Jackknife,</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>      <span class="at">ymax =</span> Estimate_Jackknife <span class="sc">+</span> StdErr_Jackknife</span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>    ), <span class="at">width =</span> <span class="fl">0.2</span></span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_flip</span>() <span class="sc">+</span></span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_discrete</span>(<span class="at">limits =</span> rev) <span class="sc">+</span></span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.title.y =</span> <span class="fu">element_blank</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -370,6 +415,7 @@ Learn more about…
 </div>
 <div class="callout-body-container callout-body">
 <ul>
+<li>The <code>xerxes</code> software tool: <a href="https://www.poseidon-adna.org/#/xerxes">xerxes CLI software</a></li>
 <li>The <code>trident fetch</code> -&gt; <code>xerxes fstats</code> workflow: <a href="https://blog.poseidon-adna.org/posts/xerxes_10.html">Xerxes’s cutlery - enjoying your dinner?</a></li>
 <li>F-statistics and how to use <code>xerxes</code>: <a href="https://mpi-eva-archaeogenetics.github.io/comp_human_adna_book/fstats.html">Introduction to F3- and F4-Statistics</a></li>
 <li><code>xerxes</code>’ algorithms and implementation details: <a href="https://github.com/poseidon-framework/poseidon-analysis-hs/blob/main/docs/xerxes_whitepaper.pdf">xerxes Whitepaper</a></li>

@@ -30,40 +30,52 @@ chmod +x xerxes
 
 ## Calculating F-statistics with xerxes
 
-For the ice mummy we previously concluded from the PCA plot, that it seems to feature an ancestry profile not unlike the of what we can observe for present day Sardinians. It plots far closer to them than for example to modern-day English reference genomes. 
-`xerxes` allows us to test this specific comparison with a test encoded as  `F4(<Chimp.REF>,<ice>,Sardinian,French)` vs. `F4(<Chimp.REF>,<ice>,English,French)`, so $\textrm{F4}(\textrm{Chimp},\textrm{Ice mummy};\textrm{Sardinian},\textrm{French})$ vs. $\textrm{F4}(\textrm{Chimp},\textrm{Ice mummy};\textrm{English},\textrm{French})$.
+For the ice mummy we previously concluded from the PCA plot, that it seems to feature an ancestry profile not unlike the of what we can observe for present day Sardinians. It plots far closer to them than for example to modern-day English or Syrian reference genomes.
+
+`xerxes` allows us to test this specific comparison with a test encoded as `F4(<Chimp.REF>,<ice>,Sardinian,English)` vs. `F4(<Chimp.REF>,<ice>,Sardinian,Syrian)`, so $\textrm{F4}(\textrm{Chimp},\textrm{Ice mummy};\textrm{Sardinian},\textrm{English})$ vs. $\textrm{F4}(\textrm{Chimp},\textrm{Ice mummy};\textrm{Sardinian},\textrm{Syrian})$.
 
 ```{bash}
 # download the Reference_Genomes package for the Chimp genome
 trident fetch -d refData -f "*Reference_Genomes*"
 # run the two F4 tests
 xerxes fstats -d refData -d ice \
-  --stat 'F4(<Chimp.REF>,<ice>,Sardinian,French)' \
-  --stat 'F4(<Chimp.REF>,<ice>,English,French)'
+  --stat 'F4(<Chimp.REF>,<ice>,Sardinian,English)' \
+  --stat 'F4(<Chimp.REF>,<ice>,Sardinian,Syrian)'
 ```
 
-::: {.callout-note}
-`xerxes` uses stream-processing to read samples from different Poseidon packages simultaneously and with small memory footprint.
+:::{.callout-tip collapse="true"}
+## Result
+```
+.-----------.-------------.-------.-----------.---------.---------.----------------.--------------------.------------------.---------------------.
+| Statistic |      a      |   b   |     c     |    d    | NrSites | Estimate_Total | Estimate_Jackknife | StdErr_Jackknife |  Z_score_Jackknife  |
+:===========:=============:=======:===========:=========:=========:================:====================:==================:=====================:
+| F4        | <Chimp.REF> | <ice> | Sardinian | English | 576238  | -1.2466e-3     | -1.2466e-3         | 1.9460e-4        | -6.405727163485704  |
+| F4        | <Chimp.REF> | <ice> | Sardinian | Syrian  | 576238  | -5.1555e-3     | -5.1556e-3         | 2.4038e-4        | -21.448186106644844 |
+'-----------'-------------'-------'-----------'---------'---------'----------------'--------------------'------------------'---------------------'
+```
 :::
 
-This command line interface is suitable for a small set of targeted tests. For bigger test series where we want to explore large sets of permutations among the individuals and populations of interest `xerxes` features a powerful .yml based configuration file format.
+::: {.callout-note}
+Just as `trident` `xerxes` uses stream-processing to read samples from different Poseidon packages simultaneously and with small memory footprint. Specific statistics can be requested with another powerful DSL documented [here](https://www.poseidon-adna.org/#/xerxes?id=allowed-statistics).
+:::
+
+This command line interface is suitable for a small set of targeted tests. For bigger test series where we want to explore large sets of permutations among the individuals and populations of interest `xerxes` features a `.yml` based configuration file format.
 
 ```{yml, file.name="f4.config"}
 fstats:
 - type: F4
   a: ["<Chimp.REF>"]
   b: ["<Iceman.SG>"]
-  c: ["English", "Sardinian"]
-  d: ["French"]
+  c: ["Sardinian"]
+  d: ["English", "Syrian"]
 ```
 
 ```{bash}
-xerxes fstats -d ref_data \
-  --statConfig f4.config
+xerxes fstats -d ref_data --statConfig f4.config
 ```
 
 ::: {.callout-note}
-This config file format allows to define groups dynamically with a simple selection syntax. This includes both positive and negative selection
+This config file format allows to define groups dynamically with a simple selection syntax. This includes both positive and negative selection, as in this example:
 
 ```{yml, file.name="f4.config"}
 groupDefs:
@@ -80,14 +92,18 @@ fstats:
 It also allow to list multiple different statistics in the `fstats` block, which will then all be calculated in one `xerxes` run.
 :::
 
-The F4 test shown here is not particular interesting though - we typically want to dive much deeper and beyond modern reference genomes. One relevant question for for an ancient sample from Western Eurasia may be, to which major ancestry components it has the strongest affinities: *Western Hunter-Gatherer* ancestry, *Ancient Near-Eastern* ancestry or *Steppe* ancestry.
+The F4 test shown here is not particular interesting though - we typically want to dive much deeper and beyond modern reference genomes.
 
-Each of these components is represented by multiple ancient reference genomes, each in turn grouped into *populations* by their shared origin in space, time and by the archaeological material they are associated with. Here we run one possible outgroup-F3 test with three individual reference populations^[This test is inspired by @Wang2023, Figure S1].
+One relevant question for for an ancient sample from Western Eurasia may be, to which major ancestry components it has the strongest affinities: *Western Hunter-Gatherer* ancestry, *Ancient Near-Eastern* ancestry or *Steppe* ancestry.
+
+Each of these components is represented by multiple ancient reference genomes, each in turn grouped into *populations* by their shared origin in space, time and by the archaeological material they are associated with.
+
+Here we run one possible outgroup-F3 test with three individual reference populations^[This test is inspired by @Wang2023, Figure S1].
 
 ```{bash}
 # download the various packages that include samples for the desired
 # reference genomes
-trident fetch -d refData \ 
+trident fetch -d refData \
   -f "Austria_EN_LBK, Croatia_Mesolithic_HG, Russia_Samara_EBA_Yamnaya, Mbuti.DG"
 # run three F3 tests
 xerxes fstats -d refData -d ice \
@@ -97,7 +113,20 @@ xerxes fstats -d refData -d ice \
   -f outgroupF3.tsv
 ```
 
-Here we wrote the results to an output file, which we can read into R to visualize the relevant estimates.
+:::{.callout-tip collapse="true"}
+## Result
+```
+.-----------.-------.---------------------------.----------.---.---------.----------------.--------------------.------------------.--------------------.
+| Statistic |   a   |             b             |    c     | d | NrSites | Estimate_Total | Estimate_Jackknife | StdErr_Jackknife | Z_score_Jackknife  |
+:===========:=======:===========================:==========:===:=========:================:====================:==================:====================:
+| F3        | <ice> | Austria_EN_LBK            | Mbuti.DG |   | 1062635 | 6.7836e-2      | 6.7836e-2          | 6.7613e-4        | 100.32934046821724 |
+| F3        | <ice> | Croatia_Mesolithic_HG     | Mbuti.DG |   | 357955  | 6.4957e-2      | 6.4957e-2          | 8.9114e-4        | 72.89261547148921  |
+| F3        | <ice> | Russia_Samara_EBA_Yamnaya | Mbuti.DG |   | 1059817 | 6.2104e-2      | 6.2105e-2          | 6.8072e-4        | 91.23382806436632  |
+'-----------'-------'---------------------------'----------'---'---------'----------------'--------------------'------------------'--------------------'
+```
+:::
+
+With `-f outgroupF3.tsv` we wrote the results into an output file, which we can read into R to visualize the relevant estimates.
 
 ```{r}
 library(magrittr)
@@ -134,6 +163,7 @@ ggsave(
 
 ::: {.callout-tip}
 ## Learn more about...
+- The `xerxes` software tool: [xerxes CLI software](https://www.poseidon-adna.org/#/xerxes)
 - The `trident fetch` -> `xerxes fstats` workflow: [Xerxes’s cutlery - enjoying your dinner?](https://blog.poseidon-adna.org/posts/xerxes_10.html)
 - F-statistics and how to use `xerxes`: [Introduction to F3- and F4-Statistics](https://mpi-eva-archaeogenetics.github.io/comp_human_adna_book/fstats.html)
 - `xerxes`' algorithms and implementation details: [xerxes Whitepaper](https://github.com/poseidon-framework/poseidon-analysis-hs/blob/main/docs/xerxes_whitepaper.pdf)
