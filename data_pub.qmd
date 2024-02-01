@@ -9,7 +9,7 @@ shift-heading-level-by: 1
 
 # Submitting a package to the Poseidon community archive
 
-So far we have used data in the public Poseidon community archive, now it's time to learn how to give back. Poseidon is very dependent on data and time donations from its community.
+So far we have used data in the public Poseidon community archive, now it is time to learn how to give back. Poseidon is very dependent on data and time donations from its community.
 
 ## Building the work environment
 
@@ -20,7 +20,9 @@ In a first step we have to make ourselves familiar with a a number of core techn
 -   [ ] Collaborative working on Git projects with [GitHub](https://github.com).
 -   [ ] Handling large files in Git using [Git LFS](https://git-lfs.com).
 
-We have to install all of these software tools and set them up correctly. This is less daunting than it sounds, because: Superficial knowledge is sufficient and knowing them is useful far beyond this particular task.
+We have to install all of these software tools and set them up correctly.
+
+This is less daunting than it sounds, because: Superficial knowledge is sufficient and knowing them is useful far beyond this particular task.
 
 ## Preparing our Poseidon package for submission
 
