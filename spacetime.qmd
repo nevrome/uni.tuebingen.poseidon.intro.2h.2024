@@ -25,6 +25,15 @@ As the `.janno` file is a simple `.tsv` file, we can easily read it into R, for 
 
 Beyond that the Poseidon ecosystem includes an R package [`janno`](https://www.poseidon-adna.org/#/janno_r_package) to read `.janno` files into a more specific `janno` data structure with some additional features.
 
+We can install the package on the R console with
+
+```{r}
+if(!require('remotes')) install.packages('remotes')
+remotes::install_github('poseidon-framework/janno')
+```
+
+and then read a `.janno` file with
+
 ```{r}
 ref_janno <- janno::read_janno("scratch/iceWithRefSmall")
 ```
